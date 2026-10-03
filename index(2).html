@@ -1,0 +1,438 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Faradila Hasan | Hukum Islam, Editor Jurnal, IAIN Manado</title>
+<meta name="description" content="Faradila Hasan, peneliti hukum keluarga Islam dan pluralisme hukum di Sulawesi Utara. Managing Editor jurnal ilmiah di IAIN Manado, Editor-in-Chief, dan reviewer.">
+<meta property="og:title" content="Faradila Hasan">
+<meta property="og:description" content="Hukum keluarga Islam, pluralisme hukum, dan komunitas Muslim minoritas di Indonesia Timur.">
+<meta property="og:type" content="profile">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Spectral:ital,wght@0,400;0,500;0,700;1,400&family=Manrope:wght@400;500;700&display=swap" rel="stylesheet">
+<style>
+:root{
+  --paper:#F3F5F2; --ink:#102A2E; --muted:#4A6266; --teal:#1F5F5B;
+  --glass:#D6E6E0; --clove:#7A3E2C; --line:#C9D6D1; --card:#FFFFFF;
+  --serif:"Spectral", Georgia, "Times New Roman", serif;
+  --sans:"Manrope", "Segoe UI", system-ui, -apple-system, sans-serif;
+  box-sizing:border-box;
+  padding-top:env(safe-area-inset-top,0px); padding-bottom:env(safe-area-inset-bottom,0px);
+}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){
+    --paper:#0F1E20; --ink:#E4EEEA; --muted:#9DB5B0; --teal:#7CC2B4;
+    --glass:#1B3336; --clove:#E3A58C; --line:#28433F; --card:#142729;
+  }
+}
+:root[data-theme="dark"]{
+  --paper:#0F1E20; --ink:#E4EEEA; --muted:#9DB5B0; --teal:#7CC2B4;
+  --glass:#1B3336; --clove:#E3A58C; --line:#28433F; --card:#142729;
+}
+*,*::before,*::after{box-sizing:inherit}
+html{scroll-behavior:smooth; scroll-padding-top:env(safe-area-inset-top,0px)}
+@media (prefers-reduced-motion:reduce){html{scroll-behavior:auto}*{transition:none!important;animation:none!important}}
+body{margin:0;background:var(--paper);color:var(--ink);font-family:var(--serif);font-size:1.0625rem;line-height:1.7}
+a{color:var(--teal);text-underline-offset:3px}
+a:hover{color:var(--clove)}
+:focus-visible{outline:2px solid var(--clove);outline-offset:3px;border-radius:2px}
+img{max-width:100%}
+
+.wrap{max-width:1180px;margin:0 auto;display:grid;grid-template-columns:minmax(260px,340px) 1fr;gap:4rem;padding:3rem 2rem 4rem}
+
+/* Rail */
+.rail{position:sticky;top:calc(2rem + env(safe-area-inset-top,0px));align-self:start}
+.photo{display:block;width:128px;height:128px;border-radius:50%;object-fit:cover;border:3px solid var(--card);box-shadow:0 0 0 1px var(--line)}
+.rail h1{font-weight:500;font-size:clamp(2.2rem,4vw,3rem);line-height:1.05;margin:1.4rem 0 .6rem;letter-spacing:-.01em}
+.role{font-family:var(--sans);font-size:.95rem;color:var(--muted);line-height:1.55;margin:0 0 1.5rem}
+.ids{list-style:none;padding:0;margin:0 0 1.5rem;font-family:var(--sans);font-size:.9rem}
+.ids li{padding:.55rem 0;border-top:1px solid var(--line);display:flex;justify-content:space-between;gap:1rem}
+.ids li:last-child{border-bottom:1px solid var(--line)}
+.ids span{color:var(--muted)}
+.ids a{font-weight:500;text-decoration:none}
+.ids a:hover{text-decoration:underline}
+nav.toc{font-family:var(--sans);font-size:.92rem;display:flex;flex-direction:column;gap:.35rem}
+nav.toc a{color:var(--ink);text-decoration:none;width:max-content}
+nav.toc a:hover{color:var(--clove)}
+.tools{display:flex;gap:.5rem;margin-top:1.6rem}
+.tools button{font:500 .8rem var(--sans);background:transparent;color:var(--ink);border:1px solid var(--line);border-radius:999px;padding:.35rem .8rem;cursor:pointer}
+.tools button:hover{border-color:var(--teal)}
+
+/* Main */
+main{min-width:0}
+.lede{font-size:clamp(1.6rem,3vw,2.25rem);line-height:1.3;font-weight:400;margin:2.2rem 0 1.5rem;max-width:22ch}
+.intro p{max-width:62ch;margin:0 0 1rem}
+section{padding-top:3.5rem}
+h2{font-weight:500;font-size:1.6rem;margin:0 0 1.2rem;padding-bottom:.6rem;border-bottom:2px solid var(--ink)}
+h3{font-family:var(--sans);font-weight:700;font-size:1rem;margin:1.6rem 0 .5rem}
+
+.rji{margin:2.5rem 0 0;padding:1.4rem 1.6rem;border-left:4px solid var(--clove);background:var(--glass);border-radius:0 10px 10px 0;max-width:62ch}
+.rji p{margin:0}
+.rji-k{font:700 .85rem var(--sans);color:var(--clove)}
+.rji-t{font-size:1.35rem;line-height:1.35;font-weight:500;margin:.3rem 0 .4rem!important}
+.rji-t2{font-family:var(--sans);font-weight:500;font-size:.95rem;margin:0 0 .5rem!important}
+.rji-l{font:500 .9rem var(--sans);margin-top:.7rem!important}
+.rji-d{font-family:var(--sans);font-size:.92rem;color:var(--muted)}
+.feature{border:1px solid var(--line);background:var(--card);border-radius:10px;padding:1.1rem 1.3rem;margin:0 0 1rem;display:flex;flex-wrap:wrap;align-items:baseline;justify-content:space-between;gap:.5rem 1rem}
+.feature strong{font-weight:500;font-size:1.25rem}
+.badge{font:700 .8rem var(--sans);background:var(--teal);color:var(--paper);border-radius:999px;padding:.25rem .75rem;white-space:nowrap}
+.orcid-box{border:1px dashed var(--teal);border-radius:10px;padding:1rem 1.2rem;margin:0 0 1.5rem}
+.orcid-box h3{margin-top:0}
+.sync{font-family:var(--sans);font-size:.8rem;color:var(--muted);margin:-.8rem 0 1.2rem}
+.pub .t a{color:inherit;text-decoration-color:var(--line)}
+.pub .t a:hover{color:var(--teal)}
+.journals{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:0;border-top:1px solid var(--line)}
+.journals div{padding:1rem 1rem 1rem 0;border-bottom:1px solid var(--line)}
+.journals strong{display:block;font-weight:500;font-size:1.05rem;line-height:1.35}
+.journals small{font-family:var(--sans);color:var(--muted);font-size:.85rem}
+.plain{padding-left:1.1rem;margin:.3rem 0;max-width:62ch}
+.plain li{margin:.3rem 0}
+
+/* Publications: the one bold piece */
+.filters{display:flex;flex-wrap:wrap;gap:.5rem;margin:0 0 1rem}
+.filters button{font:500 .85rem var(--sans);border:1px solid var(--line);background:var(--card);color:var(--ink);border-radius:999px;padding:.4rem .9rem;cursor:pointer}
+.filters button[aria-pressed="true"]{background:var(--teal);border-color:var(--teal);color:var(--paper)}
+.filters b{font-weight:400;opacity:.75;margin-left:.3rem}
+.search{width:100%;max-width:420px;font:400 .95rem var(--sans);padding:.6rem .9rem;border:1px solid var(--line);border-radius:8px;background:var(--card);color:var(--ink);margin-bottom:1.5rem}
+.yeargroup{display:grid;grid-template-columns:5.5rem 1fr;gap:1.2rem;border-top:1px solid var(--line);padding:1.1rem 0}
+.year{font:400 2.4rem/1 var(--serif);color:var(--clove);font-variant-numeric:oldstyle-nums}
+.pub{margin:0 0 1rem;max-width:66ch}
+.pub:last-child{margin-bottom:0}
+.pub .t{font-weight:500;line-height:1.45}
+.pub .m{font-family:var(--sans);font-size:.85rem;color:var(--muted);line-height:1.5;margin-top:.15rem}
+.pub .m em{font-style:italic}
+.pub mark{background:var(--glass);color:inherit;padding:0 .15em;border-radius:2px}
+.empty{font-family:var(--sans);color:var(--muted)}
+.note{font-family:var(--sans);font-size:.85rem;color:var(--muted);margin-top:1rem}
+
+footer{font-family:var(--sans);font-size:.85rem;color:var(--muted);margin-top:4rem;padding-top:1.2rem;border-top:1px solid var(--line)}
+
+@media (max-width:860px){
+  .wrap{grid-template-columns:1fr;gap:1rem;padding:2rem 1.25rem 3rem}
+  .rail{position:static}
+  nav.toc{flex-direction:row;flex-wrap:wrap;gap:.4rem 1rem}
+  .lede{margin-top:1rem}
+  .yeargroup{grid-template-columns:1fr;gap:.4rem}
+  .year{font-size:1.9rem}
+}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+<aside class="rail">
+  <img class="photo" src="data:image/jpeg;base64,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3333330huIzwIHtlE4Cz333333333lVNMeE3RQi8bv7f33333332/wCw/WdS6Mdnt65699999999CSVmkkupoeR77oc99999999rDAQWiu0tqhGunY99999999/lr0TJyjBlcG5e599999999S8bhLPh18odHFXE99999999rnUygJjod7bo9Yz99999999N9rklxPgzfZTsmt99999999X1UJPfOH1FoqxjF99999999zLEaR+04EEuqCcW999999990BGli5YvyuVJkc+9999999ocl5AONGxlHyrgA39999999o+F5lNMyyGCLiY4Gx9999x9Ux07JUxB9w3KI0sVzIhzBO75S8v0PABdYcsoNomOD3MbT77+VW0QacYw25WXu0H6fDjf/jidcCc/cAh89c9/jfCD/wD/xAApEQEAAgECBAYDAAMAAAAAAAABABEhEDEwQVFhIHGRobHRgcHhQPDx/9oACAEDAQE/EOCFQIzV/wDXePI938i2mPeHXd/ggLKJmev9SyVsu6XIjZTHs9X7gCyzjJUoJSGOj7jSKYg+VqW6zOGYsckU3EP2gATHEUC2Nc47d+8ussRXsglBAlRg2mKrJ1RQNh2+uJhe+H45xW0KhRCDQZu5Ql2R7CHzzn58PBdhOUwLA8NxlIYMoTzyfvhAFdp3IY7Q8c6Gc1LosemAnMEreaN0FhFsPBtA3w+5vlXRohTMW1KG0cwJllO8DYhNJaqYTJt8Pxy4NvTl+v8AyMpCNirnLRptWYBLRxuKruBimVnS46Hxwbz0o9iXBbYR1Ll3vp741NhjLV3/AFwVfmuje6Ui3EqUnKYQNNh56HT9z54PvWEzCViEZi1LYGJeYLnKZgm8Nn2fPBoXfSkhoEUR+8WTk0B0dpadtA/K4Nq9Q+tLgwwSKBBJvLINnWAbLFbbOU9Y/DwaYt6/brhvoGoDZndiO7oSzHRla30eDXelHtq9CFYRjZhKbhBuiK3VpX3+Hg3/ALvzqxWyGWpYyyMAd4+gb6WXd/jgpUevgqIrJumZ2JiDEVc6XrcHoPAdo8+E+Cll8mZpp6c/DskebC8W8o/T8jf1it4N6EYTeWIpIOUvnG+h/kaZD0+5hWp2xFLbFYuhoeF8bvptL8N6X4nxMYPiYcQ1Ya//xAAiEQADAAICAwADAQEAAAAAAAAAAREQITAxIEFRQGFx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" alt="Foto Faradila Hasan" width="128" height="128">
+  <h1>Faradila Hasan</h1>
+  <p class="role" data-i18n="role">LP2M IAIN Manado dan LP2M IAIM Kotamobagu, Sulawesi Utara</p>
+  <ul class="ids">
+    <li><span>Google Scholar</span><a href="https://scholar.google.co.id/citations?hl=id&amp;user=KWaV8U8AAAAJ" target="_blank" rel="noopener">Profil</a></li>
+    <li><span>ORCID</span><a href="https://orcid.org/0000-0002-7297-9313" target="_blank" rel="noopener">0000-0002-7297-9313</a></li>
+    <li><span>Scopus</span><a href="https://www.scopus.com/authid/detail.uri?authorId=57202442583" target="_blank" rel="noopener">57202442583</a></li>
+    <li><span>Web of Science</span><a href="https://www.webofscience.com/wos/author/record/O-4754-2018" target="_blank" rel="noopener">O-4754-2018</a></li>
+    <li><span>RJI</span><a href="https://anggota.relawanjurnal.id/1616710635" target="_blank" rel="noopener">1616710635</a></li>
+    <li><span>SINTA</span><a href="https://sinta.kemdikbud.go.id/authors/profile/6663846" target="_blank" rel="noopener">6663846</a></li>
+  </ul>
+  <nav class="toc" aria-label="Navigasi">
+    <a href="#tentang" data-i18n="nav1">Tentang</a>
+    <a href="#editorial" data-i18n="nav2">Pengelolaan jurnal</a>
+    <a href="#mengajar" data-i18n="nav3">Mengajar dan organisasi</a>
+    <a href="#publikasi" data-i18n="nav4">Publikasi</a>
+  </nav>
+  <div class="tools">
+    <button id="lang" type="button" aria-label="Switch language">English</button>
+    <button id="theme" type="button" data-i18n="theme">Mode gelap</button>
+  </div>
+</aside>
+
+<main>
+  <section id="tentang" class="intro" style="padding-top:0">
+    <p class="lede" data-i18n="lede">Hukum keluarga Islam, pluralisme hukum, dan komunitas Muslim minoritas di Indonesia Timur.</p>
+    <p data-i18n="p1">Kajian yang ditekuni meliputi perkawinan, perceraian, waris lintas agama, dan pertemuan antara adat dan fikih pada masyarakat Muslim di Sulawesi Utara, serta beberapa tema hukum ekonomi syariah seperti gadai dan transaksi gharar.</p>
+    <p data-i18n="p2">Pendidikan: Hukum Ekonomi Syariah (S1) dan Hukum Islam (S2).</p>
+  </section>
+
+  <aside class="rji">
+    <p class="rji-k" data-i18n="rjik">Relawan Jurnal Indonesia</p>
+    <p class="rji-t" data-i18n="rjit">Ketua Pengurus Daerah RJI Sulawesi Utara, masa bakti 2026-2030</p>
+    <p class="rji-t2" data-i18n="rjit2">Anggota Bidang SDM, Pengurus Pusat RJI, sampai 2030</p>
+    <p class="rji-d" data-i18n="rjid">Mendampingi pengelola jurnal di Sulawesi Utara dalam tata kelola OJS, standar publikasi, akreditasi, dan indeksasi. Sebelumnya di Bidang Humas Pengurus Pusat RJI.</p>
+    <p class="rji-l"><a href="https://anggota.relawanjurnal.id/1616710635" target="_blank" rel="noopener" data-i18n="rjil">Lihat profil anggota RJI</a></p>
+  </aside>
+
+  <section id="editorial">
+    <h2 data-i18n="h2a">Pengelolaan jurnal</h2>
+    <p data-i18n="p3" style="max-width:62ch">Pengelolaan OJS, alur peer review, penyuntingan naskah, serta persiapan akreditasi SINTA dan indeksasi Scopus.</p>
+    <h3 data-i18n="h3a">Jurnal di IAIN Manado</h3>
+    <div class="feature"><strong>Jurnal Ilmiah Al-Syir'ah</strong><span class="badge" data-i18n="q1">Terindeks Scopus Q1</span></div>
+    <div class="journals">
+      <div><strong>KIJMS</strong><small>Kawanua International Journal of Multicultural Studies, Managing Editor</small></div>
+      <div><strong>Potret Pemikiran</strong><small>Managing Editor</small></div>
+      <div><strong>NYIUR-Dimas</strong><small data-i18n="pf2">Pengelola portofolio</small></div>
+      <div><strong>SPECTRUM</strong><small data-i18n="pf3">Pengelola portofolio</small></div>
+      <div><strong>Al-'Aqdu</strong><small>Journal of Islamic Economics Law</small></div>
+    </div>
+    <h3 data-i18n="h3b">Editor-in-Chief</h3>
+    <ul class="plain">
+      <li>Fatayat Journal of Gender and Children Studies</li>
+      <li>Journal of Literacy and Education (Yayasan Bina Lentera Insan)</li>
+    </ul>
+    <h3 data-i18n="h3c">Editor dan reviewer di jurnal lain</h3>
+    <ul class="plain">
+      <li>Indonesian Journal of Islamic Law (IJIL)</li>
+      <li>AL-KHIYAR</li>
+      <li>BUSTANUL FUQAHA</li>
+      <li>Indonesian Journal of Sharia and Socio-Legal Studies (IJSSLS)</li>
+    </ul>
+  </section>
+
+  <section id="mengajar">
+    <h2 data-i18n="h2b">Mengajar dan organisasi</h2>
+    <h3 data-i18n="h3d">Mengajar</h3>
+    <ul class="plain">
+      <li data-i18n="t1">Dosen mata kuliah hukum, IAIM Kotamobagu</li>
+      <li data-i18n="t2">Tutor Metodologi Penelitian Hukum, Arbitrase, Mediasi dan Negosiasi, Hukum Adat, serta Sistem Hukum Indonesia, Universitas Terbuka</li>
+    </ul>
+    <h3 data-i18n="h3e">Organisasi</h3>
+    <ul class="plain">
+            <li data-i18n="o2">Bendahara Komisi Pendidikan dan Kaderisasi, MUI Provinsi Sulawesi Utara, 2025-2030</li>
+      <li data-i18n="o3">Aktif di Fatayat NU Sulawesi Utara dan Yayasan Antmind Youth Empower</li>
+    </ul>
+  </section>
+
+  <section id="publikasi">
+    <h2 data-i18n="h2c">Publikasi</h2>
+    <div class="filters" id="filters" role="group" aria-label="Filter tema"></div>
+    <input class="search" id="q" type="search" data-i18n-ph="ph" placeholder="Cari judul, jurnal, atau kata kunci" aria-label="Cari publikasi">
+    <p class="sync" id="sync" hidden></p>
+    <div id="orcid"></div>
+    <div id="list" aria-live="polite"></div>
+    <p class="note" data-i18n="note">Daftar lengkap tersedia di ORCID dan Scopus.</p>
+  </section>
+
+  <footer>© <span id="yr"></span> Faradila Hasan, Manado, Sulawesi Utara</footer>
+</main>
+</div>
+
+<script>
+const THEMES = {
+  all:{id:"Semua",en:"All"},
+  keluarga:{id:"Hukum keluarga",en:"Family law"},
+  ekonomi:{id:"Ekonomi syariah",en:"Islamic economics"},
+  gender:{id:"Gender dan anak",en:"Gender and children"},
+  hukum:{id:"Hukum dan kelembagaan",en:"Law and institutions"},
+  budaya:{id:"Kerukunan dan budaya",en:"Religion and culture"},
+  lain:{id:"Lainnya",en:"Other"}
+};
+const P = [
+["keluarga",2026,"Beyond procedural efficiency: Cumulative itsbat nikah, divorce litigation, and women's post-divorce rights in Indonesia","Harun, N., Hamzah, I., Hasan, F., Hryza, O., & Maksimentseva, N.","JURIS, 25(2), 253-264"],
+["ekonomi",2026,"Virtue in Islamic economics: The ethico-religious meaning of iqtisad","Luntajo, M. M. R., Sandimula, N. S., Niu, F. A. L., Haris, C., & Hasan, F.","Referensi Islamika, 4(3), 501-514"],
+["hukum",2026,"Web-based SIMKAH implementation at KUA: A multi-city comparative study of legal effectiveness in Indonesia","Lahilote, H. S., Bachdar, A. Z., Hasan, F., & Kolopita, A. F.","Al-Ahkam, 36(1), 133-164"],
+["hukum",2026,"Policing Islamic orthodoxy: Classificatory authority and the institutional translation of Majelis Ulama Indonesia fatwas","Yusuf, N., Jamal, R., Hasan, F., Makka, M. M., et al.","Journal of Islamic Law, 7(2), 399-431"],
+["hukum",2026,"Diverging mitigation strategies of Indonesia's Ulama Council in majority and minority Muslim regions","Yusuf, N., Jamal, R., Hasan, F., Bilalu, N., et al.","Al-Banjari, 25(1), 45-70"],
+["hukum",2026,"Ethical and legal frameworks for the responsible use of generative AI in scientific research and intellectual property protection","Rismawati, R., Hasan, F., Widiasmara, A., Nur, M. T., & Navghare, R. A.","In Harnessing AI for Teacher Support and Professional Development (pp. 237-270). IGI Global"],
+["budaya",2026,"Applying ma'na-cum-maghza hermeneutics to Prophet Isa's ascension for enhancing interreligious dialogue and SDG 16","bin Hamid Albandiyi, H., Makkarateng, M. Y., Syatar, A., Kuklys, I., Hasan, F., et al.","Nahdlatul Fikr, 2(2), 66-81"],
+["budaya",2026,"Interactional meaning-making in classroom discourse: A conversation analytical study of Islamic education","Ardianto, A., Buchari, A., Hasan, F., et al.","Script Journal, 11(2), 618-644"],
+["keluarga",2025,"The dilemma of joint property (gono-gini) in multi-ethnic marriage communities in North Sulawesi","Salma, S., Alwi, B. M., Hasan, F., & Hammad, H. A. A. K.","Al-Istinbath, 10(1), 280-302"],
+["keluarga",2025,"Inheritance across faiths in Muslim Minahasa families: Legal pluralism and cultural adaptation in Manado, Indonesia","Luntajo, M. M., & Hasan, F.","Journal of Islamic Economics Lariba, 11(1), 617-644"],
+["keluarga",2025,"Negotiating tradition and Islam in indigenous marriage rituals of Tabang, Indonesia","Asnawir, M. F., & Hasan, F.","NAKA, 1(1), 46-60"],
+["ekonomi",2025,"Mystery box transactions in the perspective of fiqh muamalah: Gharar and maysir","Hasan, F., Niu, F. A. L., & Sumanta, M. J.","Al-'Aqdu, 5(1), 56-73"],
+["gender",2025,"Merumuskan pemulihan psikologis pasca kegagalan asmara dalam perspektif teori adaptasi psikologis dan maqasid al-shari'ah","Sugitanata, A., & Hasan, F.","Prosiding AICIEM, 1(1), 174-193"],
+["gender",2024,"Justice for Cut Intan Nabila: Integration of Islamic law and psychology in adjudicating cases of violence against women","Hasan, F., & Rajak, F. A. P.","SPECTRUM, 4(1), 72-89"],
+["gender",2024,"Efek cermin digital: Fenomena di media sosial yang mempengaruhi konstruksi diri perempuan","Sugitanata, A., Hasan, F., & Aminah, S.","Fatayat Journal of Gender and Children Studies, 2(1), 9-23"],
+["gender",2024,"Pemberdayaan perempuan melalui pendidikan Islam progresif Suud Sarim Karimullah","Sugitanata, A., Hasan, F., Kurniawan, M. R., & Aminah, S.","Muadalah, 12(1), 1-13"],
+["keluarga",2024,"Grounding shariah through the flexi-parenting approach to achieve SDGs in family life","Hasan, F., Mu'iz, M. A., & Blazhevich, S. V.","Munakahat, 1(1), 69-79"],
+["keluarga",2024,"The role of bales nae tradition in strengthening family harmony in the Sasak community of Lombok","Yazid, A., Sugitanata, A., Hasan, F., Ulirrahmi, F., & Sholikhah, S. K.","Jurnal Ilmiah Al-Syir'ah, 22(1), 79-94"],
+["keluarga",2024,"Pemikiran Ahmad Rajafi terhadap gerakan pembaruan hukum keluarga Islam di Indonesia","Sugitanata, A., & Hasan, F.","Supremasi Hukum, 20(1), 62-73"],
+["keluarga",2024,"Dinamika dalam praktik pernikahan: Tawaran untuk mengurangi prevalensi poligami","Sugitanata, A., Karimullah, S. S., & Hasan, F.","AT-THARIQ, 4(1)"],
+["ekonomi",2024,"Goods pawning practices in Bilalang Satu Village and their conformity with Islamic economic principles","Hasan, F., Willya, E., Ngurawan, S. S., & Luntajo, M. M. R.","Bulletin of Islamic Research, 2(4), 557-572"],
+["ekonomi",2024,"Doll claw machine phenomenon in rural areas: A review of gharar transactions","Luntajo, M. M. R., Mamonto, M., Hasan, F., & Blazhevich, Y. S.","Al-'Aqdu, 4(1), 73-85"],
+["hukum",2024,"Digitalisasi peradilan di Indonesia Tengah: Studi implementasi e-Court dan e-Litigasi di pengadilan","Lahilote, H. S., Soleman, F., Hasan, F., Basri, R., & Lahilote, A.","Syariah: Jurnal Hukum dan Pemikiran, 24(2), 315-332"],
+["hukum",2024,"Kontruksi pemikiran Rosdalina Bukido terhadap penegakan hukum di Indonesia","Nasriah, N., Sugitanata, A., & Hasan, F.","Lisyabab, 5(1), 53-63"],
+["budaya",2024,"Midodareni transformation in Jawa Tondano: Cultural adaptation and Islamic integration","Makka, M. M., Djafar, M. A. A., Hasan, F., & Kolopita, A. F.","Potret Pemikiran, 28(1), 42-57"],
+["budaya",2024,"Menjembatani perbedaan agama melalui pendidikan: Studi tentang guru Kristen yang mengajar Pendidikan Agama Islam di Sulawesi Utara","Hasan, F.","Transformasi, 6(2), 60-82"],
+["keluarga",2023,"Feminism analysis of judges' considerations for post-divorce domestic violence victims in Medan and Banda Aceh Religious Courts","Yusuf, N., Azizah, N., & Hasan, F.","Al-'Adalah, 20(2), 283-308"],
+["ekonomi",2023,"Analysis of mudharabah contract implementation for bentor business from an Islamic economic perspective in Kotamobagu, Indonesia","Hasan, F., Annisa, S., Luntajo, M. M. R., & Niu, F. A. L.","MUTAWAZIN, 4(1), 55-71"],
+["ekonomi",2023,"Optimalisasi potensi pengelolaan zakat di Indonesia melalui integrasi teknologi","Luntajo, M. M. R., & Hasan, F.","Al-'Aqdu, 3(1), 14-28"],
+["ekonomi",2023,"Analisis pengelolaan zakat di Kabupaten Minahasa Tenggara","Jan, R. H., Hasan, F., & Timbalo, G.","NUKHBATUL 'ULUM, 9(1), 89-101"],
+["ekonomi",2023,"Pemberdayaan masyarakat miskin melalui inovasi program ekonomi produktif oleh BAZNAS Kota Kotamobagu","Hasan, F., & Thomas, F.","PERADA, 6(2)"],
+["hukum",2023,"The status of hand arrest operations in the view of legal practitioners","Hasan, F., & Makka, M. M.","KIJMS, 4(1), 16-28"],
+["budaya",2023,"Symbolic reverence: An ethnographic study on the Tonggoluan and Pusi' death rituals within Bolaang Mongondow society","Hasan, F., Fadillah, D., Willya, E., & Sugitanata, A.","Potret Pemikiran, 27(2), 161-172"],
+["keluarga",2022,"Perubahan kebiasaan pesta pernikahan pada masyarakat Bolaang Mongondow","Yusuf, N., Lahati, R., Adampe, V. M., & Hasan, F.","Al-Mizan, 18(2), 207-224"],
+["keluarga",2022,"Analisis faktor perceraian di luar pengadilan pada masyarakat Sulawesi Utara","Bukido, R., Warso, L., & Hasan, F.","Adhki, 4(1), 13-24"],
+["keluarga",2021,"Mediation in marriage disputes and divorce (Gorontalo Religious Court)","Yasin, Y., Hasan, F., & Amiruddin, F.","INNOVATIO, 21(1), 24"],
+["keluarga",2021,"Analisis pertimbangan hakim terhadap perkara isbat nikah di Pengadilan Agama Bitung","Lahilote, H. S., Lahati, R., & Hasan, F.","Gorontalo Law Review, 155-169"],
+["keluarga",2021,"The conversion of the adopted children's clan in the Village of Tumbak from the Islamic law point of view","Makka, M. M., Albatati, R. A. S., Hasan, F., & Alting, S. P.","KIJMS, 2(1), 10-17"],
+["ekonomi",2021,"Tinjauan hukum Islam tentang prosedur lelang barang gadai pada Kantor Cabang Pegadaian Syariah Istiqlal Manado","Hasan, F., & Luntajo, M. M. R.","Al-'Aqdu, 1(2), 65-77"],
+["ekonomi",2021,"Pengelolaan dana tabungan faedah pada sistem akad wadi'ah yad adh dhamanah di perbankan syariah","Hasan, F., & Haris, C.","Al-'Aqdu, 1(1), 44-52"],
+["keluarga",2020,"The adjudication of marriage disputes through mediation at the Manado Religious Court","Hasan, F., Yusuf, N., & Luntajo, M. M. R.","INNOVATIO, 20(2), 97-110"],
+["keluarga",2020,"Questioning about Law Number 16 of 2019 concerning marriage dispensation in PA Kotamobagu","Makka, M. M., Bukido, R., & Hasan, F.","KIJMS, 1(2), 80-84"],
+["hukum",2020,"Eksistensi penyidik pegawai negeri sipil perikanan dalam sistem peradilan pidana di Indonesia","Hasan, F.","Jurisprudentie, 7(2), 262-273"],
+["hukum",2020,"Considering the power of Ahl Madinah Malik bin Anas ijma as an Islamic legal source","Yusuf, N., & Hasan, F.","KIJMS, 1(1), 30-37"],
+["budaya",2020,"Pilar-pilar kerukunan beragama di Sulawesi Utara","Hasan, F.","Gorontalo Journal of Government and Political Studies"],
+["budaya",2020,"Filsafat akhlak dalam konteks pemikiran etika modern","Talibo, I., & Hasan, F.","Potret Pemikiran, 24(1), 47-57"],
+["keluarga",2019,"Pernikahan baru tanpa akta cerai","Bukido, R., Solang, C. V., Jamal, R., Makka, M. M., & Hasan, F.","NUKHBATUL 'ULUM, 5(2), 145-157"],
+["ekonomi",2019,"Implementation of the National Islamic Council Fatwa Number 47/DSN-MUI/II/2005 in Bank Syariah Mandiri Branch Manado","Hasan, F., & Habu, M. J. S.","Jurnal Ilmiah Al-Syir'ah, 17(1), 19-38"],
+["ekonomi",2019,"Pemikiran Muhammad Hatta tentang ekonomi syariah di Indonesia","Yusuf, N., Hasan, F., & Niu, F. A. L.","Potret Pemikiran, 23(1), 36-50"],
+["ekonomi",2019,"Upaya penyelesaian kredit macet pembiayaan murabahah dengan metode rescheduling di Bank Syariah Mandiri KC Pasar 45 Manado","Jan, R. H., Yusuf, Y. M., & Hasan, F.","JESI, 9(2), 118-126"],
+["budaya",2018,"Tolerance attitude among religious people in marine environment: Case study of Mosque of Ex-Kampong Texas","Hasan, F., Bukido, R., Wekke, I. S., & Mantu, R.","IOP Conference Series: Earth and Environmental Science, 156(1), 1-9"],
+["ekonomi",2018,"Mudharabah bank syariah ditinjau dari Undang-Undang Nomor 21 Tahun 2008 tentang Perbankan Syariah","Bawenti, K. A., & Hasan, F.","Jurnal Ilmiah Al-Syir'ah, 16(1), 35-57"],
+["keluarga",2018,"Penyelesaian sengketa perkawinan melalui mediasi di sistem peradilan agama","Hasan, F., & Salma","INA-Rxiv"],
+["keluarga",2017,"Divorce lawsuit due to polygamy in the Manado Religious Court","Gunawan, E., & Hasan, F.","Al-Mizan, 13(2), 272-293"],
+["ekonomi",2023,"Pengaruh kualitas produk terhadap minat beli pakaian second import","Jan, R. H., Niu, F. A. L., Paputungan, A. R., & Hasan, F.","ARBITRASE: Journal of Economics and Accounting, 4(1), 142-152"],
+["ekonomi",2023,"Peran Program Nasional Pemberdayaan Masyarakat (PNPM) Mandiri dalam mengatasi kemiskinan","Jan, R. H., Hasan, F., & Janis, B.","ARBITRASE: Journal of Economics and Accounting, 3(3), 594-602"],
+["hukum",2024,"Pelaksanaan SIMKAH berbasis web berdasarkan Keputusan Menteri Agama Nomor 892 Tahun 2019 pada Kantor Urusan Agama","Lahilote, H. S., Bachdar, A. Z., Hasan, F., & Lahilote, A.","Proceeding Sharia International Conference"],
+["ekonomi",2022,"Pengaruh label halal terhadap keputusan pembelian daging ayam","Jan, R. H., Bachdar, F. N., & Hasan, F.","ARBITRASE: Journal of Economics and Accounting, 3(2), 198-206"],
+["keluarga",2022,"Nikah dini dan pandangan ulama","Hasan, F.","In Ulama Era Milenial dan Kesalehan Sosial (p. 23). Bintang Semesta Media"],
+["lain",2021,"The effect of compensation and work environment on employee performance with teamwork as a mediation variable at the Makassar Main Port Authority Office","Arifuddin, A., Yusriadi, Y., Umanailo, M. C. B., & Hasan, F.","International Conference on Industrial Engineering and Operations Management"],
+["lain",2021,"Talent management, knowledge management and health officer performance on service quality","Nasriani, Tamsah, H., Purnomo, P., et al., Hasan, F.","International Conference on Industrial Engineering and Operations Management"],
+["lain",2021,"The influence of hard competency and employee productivity on company performance through social capital at PT. Celebes Indonesia Marble","Arma, A. B., Tamsah, H., Ansar, M., Ilham, R., Hutagalung, D., Hasan, F., et al.","International Conference on Industrial Engineering and Operations Management"],
+["lain",2020,"Pengaruh kompetensi terhadap komitmen organisasi pada Perguruan Tinggi Keagamaan Islam Negeri di Indonesia Timur","Jan, R. H., & Hasan, F.","Gorontalo Management Research, 3(1), 176-190"],
+["keluarga",2020,"Implementasi perkawinan anak usia dini pada kesejahteraan keluarga di Kota Manado","Hasan, F.","Tesis, Pascasarjana IAIN Manado"],
+["ekonomi",2019,"Menyoal sisa uang belanja yang tidak dikembalikan penjual ditinjau dari sisi hukum dan hukum Islam","Hasan, F.","In Menjadi Islam di Tengah Tantangan Modernitas (pp. 65-82). Istana Agency"],
+["hukum",2019,"Ilmu dan kepentingan politik tinjauan hukum Islam","Bukido, R., & Hasan, F.","Al-Istinbath: Jurnal Hukum Islam"],
+["budaya",2018,"Khazanah Islam, perjumpaan kajian dengan ilmu sosial","Rajafi, A., & Hasan, F.","Deepublish"],
+["budaya",2018,"Socio-economic empowerment programme and radicalism in border area","Salim, D. P., Hasan, F., Mushlihin, M. A., Mantu, R., Bilfagih, T., et al.","Convey Indonesia"],
+["ekonomi",2018,"Implementasi akad ijarah di Pegadaian Syariah Manado","Hasan, F., & Bukido, R.","The International Postgraduate Research Conference in Islamic Studies, IAIN Manado"],
+["ekonomi",2016,"Tinjauan hukum Islam dalam penerapan akad ijarah pada produk rahn di Cabang Pegadaian Syariah Istiqlal Manado","Hasan, F., Syarifuddin, S., & Luntajo, M. M. R.","Jurnal Ilmiah Al-Syir'ah, 14(2), 40-51"],
+["ekonomi",2016,"Penerapan akad ijarah pada produk rahn di Cabang Pegadaian Syariah Istiqlal Manado","Bukido, R., & Hasan, F.","Jurnal Ilmiah Al-Syir'ah, 14(1), 1-19"]
+];
+
+const I18N = {
+ en:{
+  role:"LP2M IAIN Manado and LP2M IAIM Kotamobagu, North Sulawesi",
+  nav1:"About",nav2:"Journal management",nav3:"Teaching and service",nav4:"Publications",
+  lede:"Islamic family law, legal pluralism, and minority Muslim communities in Eastern Indonesia.",
+  p1:"Areas of study include marriage, divorce, interfaith inheritance, and the meeting of custom and fiqh among Muslim communities in North Sulawesi, along with selected topics in Islamic economic law such as pawning and gharar transactions.",
+  p2:"Education: Islamic Economic Law (S1) and Islamic Law (S2).",
+  h2a:"Journal management",
+  p3:"OJS administration, peer review workflows, manuscript editing, and preparation for SINTA accreditation and Scopus indexing.",
+  h3a:"Journals at IAIN Manado",pf:"Portfolio management",pf2:"Portfolio management",pf3:"Portfolio management",
+  h3b:"Editor-in-Chief",h3c:"Editor and reviewer for other journals",
+  h2b:"Teaching and service",h3d:"Teaching",
+  t1:"Lecturer in law, IAIM Kotamobagu",
+  t2:"Tutor for Legal Research Methodology, Arbitration, Mediation and Negotiation, Customary Law, and the Indonesian Legal System, Universitas Terbuka",
+  h3e:"Organizations",
+  o2:"Treasurer, Commission for Education and Cadre Development, MUI North Sulawesi, 2025-2030",
+  o3:"Active in Fatayat NU North Sulawesi and the Antmind Youth Empower Foundation",
+  rjik:"Relawan Jurnal Indonesia",
+  rjit:"Chair, RJI North Sulawesi Regional Board, 2026-2030",
+  rjil:"View RJI member profile",
+  rjit2:"Member, Human Resources Division, RJI Central Board, through 2030",
+  rjid:"Supporting journal managers in North Sulawesi with OJS management, publication standards, accreditation, and indexing. Previously in the Public Relations Division of the RJI Central Board.",
+  q1:"Scopus indexed, Q1",
+  h2c:"Publications",ph:"Search title, journal, or keyword",
+  note:"The full record is available on ORCID and Scopus.",
+  theme:"Dark mode",themeL:"Light mode",empty:"No publications match that search.",lang:"Bahasa Indonesia",orcidH:"Other works on ORCID",sync:"Synced with ORCID: "
+ },
+ id:{theme:"Mode gelap",themeL:"Mode terang",empty:"Tidak ada publikasi yang cocok.",lang:"English",orcidH:"Karya lain di ORCID",sync:"Tersinkron dengan ORCID: "}
+};
+const original = {};
+document.querySelectorAll("[data-i18n]").forEach(el=>original[el.dataset.i18n]=el.textContent);
+original.ph = document.getElementById("q").placeholder;
+
+let lang = "id", theme = "all", query = "";
+function t(k){ return lang==="en" ? (I18N.en[k] ?? original[k]) : (I18N.id[k] ?? original[k]); }
+
+function esc(s){return s.replace(/[&<>"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]))}
+function hi(s){
+  let out = esc(s).replace(/Hasan, F\./g,"<strong>Hasan, F.</strong>");
+  if(query){ const r = new RegExp("("+query.replace(/[.*+?^${}()|[\]\\]/g,"\\$&")+")","ig"); out = out.replace(/(<[^>]+>)|([^<]+)/g,(m,tag,txt)=>tag?tag:txt.replace(r,"<mark>$1</mark>")); }
+  return out;
+}
+
+function renderFilters(){
+  const f = document.getElementById("filters");
+  f.innerHTML = "";
+  Object.keys(THEMES).forEach(k=>{
+    const n = k==="all" ? P.length : P.filter(p=>p[0]===k).length;
+    const b = document.createElement("button");
+    b.type="button"; b.setAttribute("aria-pressed", k===theme);
+    b.innerHTML = THEMES[k][lang] + "<b>" + n + "</b>";
+    b.onclick = ()=>{ theme=k; renderFilters(); renderList(); };
+    f.appendChild(b);
+  });
+}
+function renderList(){
+  const q = query.toLowerCase();
+  const items = P.filter(p => (theme==="all"||p[0]===theme) && (!q || (p[2]+" "+p[3]+" "+p[4]).toLowerCase().includes(q)));
+  renderOrcid(q);
+  const box = document.getElementById("list");
+  if(!items.length){ box.innerHTML = '<p class="empty">'+t("empty")+'</p>'; return; }
+  const years = [...new Set(items.map(p=>p[1]))].sort((a,b)=>b-a);
+  box.innerHTML = years.map(y=>{
+    const rows = items.filter(p=>p[1]===y).map(p=>
+      '<article class="pub"><div class="t">'+(p[5]?'<a href="'+esc(p[5])+'" target="_blank" rel="noopener">'+hi(p[2])+'</a>':hi(p[2]))+'</div><div class="m">'+hi(p[3])+' <em>'+hi(p[4])+'</em></div></article>').join("");
+    return '<div class="yeargroup"><div class="year">'+y+'</div><div>'+rows+'</div></div>';
+  }).join("");
+}
+function applyLang(){
+  document.documentElement.lang = lang;
+  document.querySelectorAll("[data-i18n]").forEach(el=>{ if(el.id!=="theme") el.textContent = t(el.dataset.i18n); });
+  document.getElementById("q").placeholder = t("ph");
+  document.getElementById("lang").textContent = t("lang");
+  updateThemeLabel(); renderFilters(); renderList();
+}
+function isDark(){
+  const a = document.documentElement.dataset.theme;
+  return a ? a==="dark" : matchMedia("(prefers-color-scheme: dark)").matches;
+}
+function updateThemeLabel(){ document.getElementById("theme").textContent = isDark() ? t("themeL") : t("theme"); }
+
+document.getElementById("lang").onclick = ()=>{ lang = lang==="id"?"en":"id"; try{localStorage.setItem("fh-lang",lang)}catch(e){} applyLang(); };
+document.getElementById("theme").onclick = ()=>{
+  const next = isDark() ? "light" : "dark";
+  document.documentElement.dataset.theme = next;
+  try{localStorage.setItem("fh-theme",next)}catch(e){}
+  updateThemeLabel();
+};
+document.getElementById("q").addEventListener("input",e=>{ query=e.target.value.trim(); renderList(); });
+document.getElementById("yr").textContent = new Date().getFullYear();
+
+try{
+  const sl = localStorage.getItem("fh-lang"); if(sl) lang = sl;
+  const st = localStorage.getItem("fh-theme"); if(st) document.documentElement.dataset.theme = st;
+}catch(e){}
+/* Sinkronisasi otomatis ORCID */
+const ORCID_ID = "0000-0002-7297-9313";
+let EXTRA = [], orcidCount = 0;
+const norm = s => (s||"").toLowerCase().normalize("NFD").replace(/[^a-z0-9]/g,"").slice(0,45);
+function renderOrcid(q){
+  const box = document.getElementById("orcid");
+  const s = document.getElementById("sync");
+  if(orcidCount){ s.hidden=false; s.textContent = t("sync") + orcidCount + (lang==="en"?" works":" karya"); }
+  const items = EXTRA.filter(e => theme==="all" && (!q || (e.title+" "+e.journal).toLowerCase().includes(q)));
+  if(!items.length){ box.innerHTML=""; return; }
+  box.innerHTML = '<div class="orcid-box"><h3>'+t("orcidH")+'</h3>' + items.map(e=>
+    '<article class="pub"><div class="t">'+(e.url?'<a href="'+esc(e.url)+'" target="_blank" rel="noopener">'+hi(e.title)+'</a>':hi(e.title))+
+    '</div><div class="m">'+(e.year||"")+(e.journal?' <em>'+hi(e.journal)+'</em>':'')+'</div></article>').join("") + '</div>';
+}
+async function loadOrcid(){
+  try{
+    const r = await fetch("https://pub.orcid.org/v3.0/"+ORCID_ID+"/works",{headers:{Accept:"application/json"}});
+    if(!r.ok) return;
+    const d = await r.json();
+    const known = new Map(P.map(p=>[norm(p[2]),p]));
+    const extra = [];
+    for(const g of (d.group||[])){
+      const w = (g["work-summary"]||[])[0]; if(!w) continue;
+      const title = w.title && w.title.title && w.title.title.value; if(!title) continue;
+      const year = w["publication-date"] && w["publication-date"].year ? +w["publication-date"].year.value : null;
+      const journal = w["journal-title"] ? w["journal-title"].value : "";
+      const ids = (g["external-ids"] && g["external-ids"]["external-id"]) || [];
+      const doi = (ids.find(i=>i["external-id-type"]==="doi")||{})["external-id-value"];
+      const url = doi ? "https://doi.org/"+doi.replace(/^https?:\/\/(dx\.)?doi\.org\//,"") : (w.url ? w.url.value : "");
+      const m = known.get(norm(title));
+      if(m){ if(url && !m[5]) m[5]=url; }
+      else extra.push({title,year,journal,url});
+    }
+    orcidCount = (d.group||[]).length;
+    EXTRA = extra.sort((a,b)=>(b.year||0)-(a.year||0));
+    renderList();
+  }catch(e){ /* ORCID tidak terjangkau: daftar statis tetap tampil */ }
+}
+applyLang();
+loadOrcid();
+</script>
+</body>
+</html>
