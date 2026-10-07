@@ -1,0 +1,778 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Simulasi Akreditasi Jurnal 2026</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+:root{
+  --paper:#f5f7f6; --surface:#ffffff; --ink:#18263a; --muted:#566273; --line:#dde3e6;
+  --accent:#2a4fb0; --accent-soft:#e7edfb; --ok:#13705f; --ok-soft:#e2f2ee;
+  --warn:#9a6a00; --warn-soft:#fbf1d9; --bad:#a8281f; --bad-soft:#fbe6e3;
+  --z0:#c9d0d8; --z4:#9fb7e8; --z3:#6f93dc; --z2:#4570c8; --z1:#2a4fb0;
+}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){
+    --paper:#11161e; --surface:#19202b; --ink:#e7ecf2; --muted:#a3adba; --line:#2c3644;
+    --accent:#8ea9f0; --accent-soft:#222f4d; --ok:#5fc7ae; --ok-soft:#163a33;
+    --warn:#e7b94d; --warn-soft:#3a3018; --bad:#f08a80; --bad-soft:#3d1f1d;
+    --z0:#3a4352; --z4:#33476f; --z3:#3f5d9a; --z2:#5276c4; --z1:#8ea9f0;
+  }
+}
+:root[data-theme="dark"]{
+  --paper:#11161e; --surface:#19202b; --ink:#e7ecf2; --muted:#a3adba; --line:#2c3644;
+  --accent:#8ea9f0; --accent-soft:#222f4d; --ok:#5fc7ae; --ok-soft:#163a33;
+  --warn:#e7b94d; --warn-soft:#3a3018; --bad:#f08a80; --bad-soft:#3d1f1d;
+  --z0:#3a4352; --z4:#33476f; --z3:#3f5d9a; --z2:#5276c4; --z1:#8ea9f0;
+}
+:root{box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+html{scroll-padding-top:calc(env(safe-area-inset-top,0px) + 80px)}
+*,*::before,*::after{box-sizing:inherit}
+body{margin:0;background:var(--paper);color:var(--ink);font-family:'Plus Jakarta Sans',system-ui,-apple-system,'Segoe UI',Roboto,Arial,sans-serif;font-size:16px;line-height:1.55;font-variant-numeric:tabular-nums}
+button,input,select{font:inherit;color:inherit}
+:focus-visible{outline:3px solid var(--accent);outline-offset:2px;border-radius:6px}
+.wrap{max-width:1240px;margin:0 auto;padding:24px 20px 80px}
+header.top{display:flex;flex-wrap:wrap;gap:16px 32px;align-items:flex-end;justify-content:space-between;padding-bottom:20px;border-bottom:2px solid var(--ink)}
+h1{font-size:clamp(26px,4vw,38px);line-height:1.1;margin:0;font-weight:800;letter-spacing:-.5px;max-width:18ch}
+.sub{color:var(--muted);margin:6px 0 0;max-width:60ch}
+.journal-bar{display:flex;flex-wrap:wrap;gap:10px;align-items:center}
+.journal-bar select,.journal-bar input,.field input,.field select{background:var(--surface);border:1px solid var(--line);border-radius:8px;padding:9px 12px;min-width:0}
+.btn{background:var(--surface);border:1px solid var(--line);border-radius:8px;padding:9px 14px;cursor:pointer;font-weight:600}
+.btn:hover{border-color:var(--accent)}
+.btn.primary{background:var(--accent);color:var(--surface);border-color:var(--accent)}
+.btn.ghost{background:transparent}
+.layout{display:grid;grid-template-columns:minmax(0,1fr) 360px;gap:32px;margin-top:24px;align-items:start}
+.meta{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:14px;background:var(--surface);border:1px solid var(--line);border-radius:12px;padding:18px}
+.field label{display:block;font-size:14px;font-weight:600;margin-bottom:6px}
+.field input,.field select{width:100%}
+.field .hint{font-size:13px;color:var(--muted);margin-top:6px}
+nav.steps{display:flex;gap:6px;overflow-x:auto;margin:22px 0 4px;padding-bottom:4px}
+nav.steps button{flex:0 0 auto;background:transparent;border:1px solid var(--line);border-radius:999px;padding:7px 14px;cursor:pointer;font-weight:600;font-size:14px;color:var(--muted)}
+nav.steps button[aria-current="true"]{background:var(--ink);color:var(--paper);border-color:var(--ink)}
+nav.steps .n{display:inline-block;margin-right:6px;opacity:.7}
+section.step{display:none}
+section.step.active{display:block}
+.step h2{font-size:24px;margin:22px 0 4px;font-weight:800}
+.step .lead{color:var(--muted);margin:0 0 16px;max-width:72ch}
+.group{margin:22px 0 8px;display:flex;justify-content:space-between;align-items:baseline;gap:12px;border-bottom:1px solid var(--line);padding-bottom:6px}
+.group h3{margin:0;font-size:18px}
+.group .pts{font-weight:700;color:var(--muted);font-size:15px;white-space:nowrap}
+.item{background:var(--surface);border:1px solid var(--line);border-radius:12px;padding:16px 18px;margin:12px 0}
+.item-head{display:flex;justify-content:space-between;gap:12px;align-items:baseline;margin-bottom:10px}
+.item-head .code{font-weight:800;color:var(--accent);margin-right:8px}
+.item-head .t{font-weight:700}
+.item-head .score{font-weight:800;white-space:nowrap;font-size:15px}
+.item-head .score.empty{color:var(--muted);font-weight:600}
+.opts{display:flex;flex-direction:column;gap:6px}
+.opt{display:grid;grid-template-columns:22px 1fr auto;gap:10px;align-items:start;padding:8px 10px;border-radius:8px;cursor:pointer;border:1px solid transparent}
+.opt:hover{background:var(--accent-soft)}
+.opt input{margin:3px 0 0;accent-color:var(--accent);width:16px;height:16px}
+.opt.sel{background:var(--accent-soft);border-color:var(--accent)}
+.opt .v{font-weight:700;color:var(--muted);min-width:34px;text-align:right}
+.opt.sel .v{color:var(--accent)}
+.note{font-size:14px;color:var(--muted);margin-top:8px}
+.checks{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:4px 16px}
+.check{display:flex;gap:10px;align-items:flex-start;padding:6px 4px;cursor:pointer}
+.check input{margin-top:4px;accent-color:var(--accent);width:16px;height:16px;flex:0 0 auto}
+.gate{display:grid;grid-template-columns:1fr auto;gap:10px;align-items:center;padding:10px 14px;border-bottom:1px solid var(--line)}
+.gate:last-child{border-bottom:none}
+.gate .g-title{font-weight:600}
+.gate .g-desc{font-size:14px;color:var(--muted)}
+.seg{display:inline-flex;border:1px solid var(--line);border-radius:8px;overflow:hidden}
+.seg button{border:none;background:transparent;padding:7px 12px;cursor:pointer;font-weight:600;font-size:14px;color:var(--muted)}
+.seg button+button{border-left:1px solid var(--line)}
+.seg button.on-yes{background:var(--ok-soft);color:var(--ok)}
+.seg button.on-no{background:var(--bad-soft);color:var(--bad)}
+.seg button.on-na{background:var(--line);color:var(--ink)}
+.box{background:var(--surface);border:1px solid var(--line);border-radius:12px}
+.navrow{display:flex;justify-content:space-between;gap:12px;margin-top:22px}
+aside.panel{position:sticky;top:calc(env(safe-area-inset-top,0px) + 16px);display:flex;flex-direction:column;gap:14px}
+.card{background:var(--surface);border:1px solid var(--line);border-radius:12px;padding:18px}
+.total{display:flex;align-items:baseline;gap:10px}
+.total .num{font-size:56px;font-weight:800;line-height:1;letter-spacing:-1px}
+.total .of{color:var(--muted);font-weight:600}
+.rank{font-size:20px;font-weight:800;margin:6px 0 0}
+.rank-note{color:var(--muted);font-size:14px;margin:2px 0 0}
+.ladder{margin:18px 0 6px;position:relative}
+.ladder .bar{display:grid;grid-template-columns:60fr 10fr 10fr 10fr 10fr;height:16px;border-radius:4px;overflow:hidden}
+.ladder .bar span:nth-child(1){background:var(--z0)}
+.ladder .bar span:nth-child(2){background:var(--z4)}
+.ladder .bar span:nth-child(3){background:var(--z3)}
+.ladder .bar span:nth-child(4){background:var(--z2)}
+.ladder .bar span:nth-child(5){background:var(--z1)}
+.ladder .marker{position:absolute;top:-6px;width:4px;height:28px;background:var(--ink);border-radius:2px;transform:translateX(-2px);transition:left .35s ease}
+.ladder .ticks{position:relative;height:20px;font-size:12px;color:var(--muted);margin-top:4px}
+.ladder .ticks span{position:absolute;transform:translateX(-50%)}
+.ladder .labels{display:grid;grid-template-columns:60fr 10fr 10fr 10fr 10fr;font-size:12px;color:var(--muted);text-align:center;font-weight:600}
+@media (prefers-reduced-motion: reduce){.ladder .marker{transition:none}}
+.split{display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px;margin-top:12px}
+.split div{background:var(--paper);border-radius:8px;padding:10px}
+.split b{display:block;font-size:20px}
+.split small{color:var(--muted);font-size:12px;font-weight:600}
+.pdfrow{display:flex;flex-direction:column;gap:6px;margin-top:14px}
+.pdfrow .btn{width:100%}
+.pdfmsg{font-size:13px;color:var(--muted)}
+.pdfmsg a{color:var(--accent);font-weight:700}
+.progress{font-size:14px;color:var(--muted);margin-top:10px}
+.alert{border-radius:10px;padding:12px 14px;font-size:14px}
+.alert b{display:block;margin-bottom:2px}
+.alert.bad{background:var(--bad-soft);color:var(--bad)}
+.alert.warn{background:var(--warn-soft);color:var(--warn)}
+.alert.ok{background:var(--ok-soft);color:var(--ok)}
+.prio h4{margin:0 0 8px;font-size:16px}
+.prio ol{margin:0;padding-left:20px}
+.prio li{margin:6px 0;font-size:14px}
+.prio .gap{font-weight:700;color:var(--bad)}
+.recs{display:flex;flex-direction:column;gap:12px}
+.rec{background:var(--surface);border:1px solid var(--line);border-left:4px solid var(--warn);border-radius:10px;padding:14px 16px}
+.rec.full{border-left-color:var(--ok)}
+.rec .rh{display:flex;justify-content:space-between;gap:12px;font-weight:700}
+.rec p{margin:6px 0 0;font-size:15px}
+.rec .lost{color:var(--bad);white-space:nowrap}
+.table-wrap{overflow-x:auto}
+table.cmp{width:100%;border-collapse:collapse;font-size:14px;min-width:640px}
+table.cmp th,table.cmp td{padding:8px 10px;border-bottom:1px solid var(--line);text-align:left}
+table.cmp th{background:var(--paper);font-weight:700}
+table.cmp td.n{text-align:right}
+.summary{width:100%;min-height:160px;background:var(--paper);border:1px solid var(--line);border-radius:8px;padding:12px;font-size:14px;resize:vertical}
+.foot{margin-top:40px;color:var(--muted);font-size:13px;border-top:1px solid var(--line);padding-top:14px;max-width:80ch}
+.mini{display:none}
+.rk-bar{height:8px;background:var(--line);border-radius:4px;overflow:hidden;min-width:80px}
+.rk-bar span{display:block;height:100%;background:var(--accent)}
+table.cmp tr.rk-sub td{font-weight:700;background:var(--paper)}
+.rk-pot{color:var(--bad);font-weight:700}
+.rtl-h{font-size:17px;margin:22px 0 8px}
+.rtl-h span{font-weight:600;color:var(--muted);font-size:14px;margin-left:6px}
+.rtl-s{margin:0;padding-left:20px;max-width:80ch}
+.rtl-s li{margin:6px 0}
+.rtl-a{margin:8px 0 0;padding-left:20px;font-size:15px}
+.rtl-a li{margin:3px 0}
+.local-note{margin:14px 0 0;padding:10px 14px;border-radius:10px;background:var(--accent-soft);font-size:14px;max-width:none}
+[hidden]{display:none!important}
+@media (max-width:960px){
+  .layout{grid-template-columns:1fr}
+  aside.panel{position:static;order:-1}
+  aside.panel .prio,aside.panel .hide-m{display:none}
+  .mini{display:flex;position:sticky;top:0;z-index:5;background:var(--ink);color:var(--paper);padding:calc(env(safe-area-inset-top,0px) + 10px) 16px 10px;justify-content:space-between;align-items:center;font-weight:700;margin:-24px -20px 16px}
+}
+@media (max-width:560px){
+  .wrap{padding:24px 14px 64px}
+  .mini{margin:-24px -14px 16px}
+  .split{grid-template-columns:1fr 1fr}
+  .total .num{font-size:44px}
+  .gate{grid-template-columns:1fr}
+}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <div class="mini" aria-hidden="true"><span id="miniName">Jurnal</span><span id="miniScore">0 | Belum terakreditasi</span></div>
+
+  <header class="top">
+    <div>
+      <h1>Simulasi Akreditasi Jurnal Ilmiah</h1>
+      <p class="sub">Berdasarkan Permendiktisaintek 9/2026 dan Juknis Dirjen Saintek 374/DST/D.D1/HM.01.01/2026. Hasilnya perkiraan, bukan keputusan asesor.</p>
+    </div>
+    <div class="journal-bar">
+      <label for="journalSelect" class="sr" style="font-size:14px;font-weight:600">Jurnal</label>
+      <select id="journalSelect" aria-label="Pilih jurnal tersimpan"></select>
+      <button class="btn" id="newJournal" type="button">Jurnal baru</button>
+      <button class="btn ghost" id="delJournal" type="button">Hapus</button>
+    </div>
+  </header>
+
+  <p class="local-note">Aplikasi ini hanya simulasi. Isian tersimpan di peramban komputer masing-masing, tidak dikirim ke server, dan tidak terlihat oleh pengguna lain. Hasil bisa diunduh sebagai PDF.</p>
+
+  <div class="layout">
+    <main>
+      <div class="meta">
+        <div class="field">
+          <label for="jName">Nama jurnal</label>
+          <input id="jName" type="text" placeholder="Contoh: Jurnal Keperawatan">
+        </div>
+        <div class="field">
+          <label for="jType">Jenis usulan</label>
+          <select id="jType">
+            <option value="ulang">Akreditasi ulang</option>
+            <option value="baru">Akreditasi baru</option>
+          </select>
+        </div>
+        <div class="field">
+          <label for="jField">Kelompok bidang ilmu</label>
+          <select id="jField">
+            <option value="sosial">Ilmu sosial</option>
+            <option value="saintek">Sains, teknologi, kesehatan</option>
+          </select>
+          <div class="hint" id="hHint"></div>
+        </div>
+        <div class="field" id="endWrap">
+          <label for="jEnd">Akhir masa berlaku SK</label>
+          <input id="jEnd" type="date">
+          <div class="hint" id="endHint">Isi untuk menghitung batas pengajuan akreditasi ulang.</div>
+        </div>
+      </div>
+
+      <nav class="steps" id="steps" aria-label="Tahapan simulasi"></nav>
+      <div id="stepHost"></div>
+
+      <p class="foot">Bobot, indikator, dan ambang peringkat diambil dari Juknis 374/2026: tata kelola 46, mutu artikel 54, disinsentif sebagai pengurang. Peringkat 1: 90 ke atas, Peringkat 2: 80 sampai di bawah 90, Peringkat 3: 70 sampai di bawah 80, Peringkat 4: 60 sampai di bawah 70. Kelompok bidang kesehatan tidak disebut eksplisit dalam juknis; simulasi ini memakai ambang sains-teknologi untuk h-index. Data tersimpan hanya di peramban Anda.</p>
+    </main>
+
+    <aside class="panel" aria-live="polite">
+      <div class="card">
+        <div class="total"><span class="num" id="tNum">0</span><span class="of">dari 100</span></div>
+        <p class="rank" id="tRank">Tidak terakreditasi</p>
+        <p class="rank-note" id="tNext"></p>
+        <div class="ladder" aria-hidden="true">
+          <div class="bar"><span></span><span></span><span></span><span></span><span></span></div>
+          <div class="marker" id="marker" style="left:0%"></div>
+          <div class="ticks"><span style="left:0%">0</span><span style="left:60%">60</span><span style="left:70%">70</span><span style="left:80%">80</span><span style="left:90%">90</span><span style="left:100%">100</span></div>
+          <div class="labels"><span>Tidak</span><span>4</span><span>3</span><span>2</span><span>1</span></div>
+        </div>
+        <div class="split">
+          <div><small>Tata kelola</small><b id="sTK">0</b><small>dari 46</small></div>
+          <div><small>Mutu artikel</small><b id="sMA">0</b><small>dari 54</small></div>
+          <div><small>Disinsentif</small><b id="sDI">0</b><small>pengurang</small></div>
+        </div>
+        <p class="progress" id="prog"></p>
+        <div class="pdfrow" id="pdfRow"><button class="btn primary" type="button" id="pdfBtn">Unduh hasil simulasi dan RTL (PDF)</button><span class="pdfmsg" id="pdfMsg" role="status"></span></div>
+      </div>
+      <div id="gateAlert"></div>
+      <div class="card prio" id="prio"></div>
+    </aside>
+  </div>
+</div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.8.2/jspdf.plugin.autotable.min.js"></script>
+<script>
+(function(){
+const STEPS=[
+ {id:'awal',t:'Pemeriksaan Awal'},
+ {id:'layak',t:'Pemeriksaan Kelayakan'},
+ {id:'tk',t:'Tata kelola'},
+ {id:'ma',t:'Mutu artikel'},
+ {id:'dis',t:'Disinsentif'},
+ {id:'hasil',t:'Hasil dan saran'}
+];
+const AWAL=[
+ {k:'a1',t:'Validitas laman jurnal',d:'Laman jurnal aktif dan dapat diakses.'},
+ {k:'a2',t:'Nama jurnal sesuai ISSN',d:'Nama sama persis dengan data portal ISSN.'},
+ {k:'a3',t:'Penerbit sesuai ISSN',d:'Penerbit di laman sama dengan data ISSN.'},
+ {k:'a4',t:'Kesesuaian jenis dan waktu usulan',d:'Jenis usulan tepat dan diajukan pada periode yang dibuka.'},
+ {k:'a5',t:'Frekuensi terbitan',d:'Minimal 2 nomor per tahun, sesuai data e-ISSN.',fr:true},
+ {k:'a6',t:'Keberkalaan 3 tahun terakhir',d:'Terbit minimal 3 tahun berturut-turut, minimal 5 artikel per nomor.',fr:true},
+ {k:'a7',t:'Peringkat dan masa berlaku tampil',d:'Peringkat, nomor dan tanggal SK, serta tanggal akhir tercantum di laman.',ulang:true},
+ {k:'a8',t:'Laman etika publikasi',d:'Kebijakan etika publikasi mengacu COPE.'},
+ {k:'a9',t:'Laman biaya pemrosesan artikel',d:'Biaya penulis dijelaskan, termasuk bila gratis.'},
+ {k:'a10',t:'DOI aktif',d:'Setiap artikel memiliki DOI yang aktif.'},
+ {k:'a11',t:'Teks penuh setiap artikel',d:'PDF lengkap tersedia di setiap artikel.'},
+ {k:'a12',t:'Keberagaman afiliasi tim editor',d:'Editor berasal dari berbagai institusi.'},
+ {k:'a13',t:'Keberagaman afiliasi mitra bestari',d:'Reviewer berasal dari berbagai institusi.'},
+ {k:'a14',t:'Username dan password valid',d:'Akun untuk asesor dapat dipakai masuk.'},
+ {k:'a15',t:'Kredensial peran editor tersedia',d:'Akun asesor berperan editor untuk menelusuri proses.'}
+];
+const LAYAK=[
+ {k:'l1',t:'Kecukupan penelaahan oleh mitra bestari',d:'Setiap artikel yang terbit terbukti telah ditelaah mitra bestari.'},
+ {k:'l2',t:'Validitas dan integritas penerbit',d:'Rekam jejak penerbit dan kepatuhannya pada etika publikasi dan integritas akademik.'}
+];
+const COPE=['ISSN di halaman utama dengan tautan ke basis data ISSN','Tujuan dan ruang lingkup','Jenis manuskrip yang diterima','Jadwal penerbitan','Jenis akses (open access)','Informasi kontak lengkap dengan alamat fisik','Kebijakan hak cipta','Jenis lisensi (Creative Commons)','Kepemilikan dan pengelolaan, termasuk penerbit','Kriteria kepengarangan','Penanganan pelanggaran riset','Diskusi pasca-penerbitan','Koreksi dan retraksi','Pengarsipan elektronik','Konflik kepentingan','Kebijakan plagiasi'];
+const GALLEY=['Judul sirahan: nama jurnal, volume, nomor, tahun, halaman','Lisensi akses','Hak cipta','Riwayat naskah (diterima, direvisi, disetujui, terbit)','DOI','Pernyataan penggunaan AI','Pernyataan kontribusi penulis','Pernyataan pendanaan','Pernyataan konflik kepentingan'];
+
+const U=[
+ {g:'A',gt:'Konsistensi identitas jurnal',grp:'tk',items:[
+  {k:'A',t:'Identitas jurnal',max:2,o:[[2,'Unik dan spesifik, konsisten di laman, metadata, dan galley'],[1,'Kurang spesifik atau kurang konsisten'],[0,'Tidak unik, memuat nama lembaga lokal, atau tidak sesuai ISSN']],
+   s:'Samakan nama, singkatan, e-ISSN, dan penerbit di laman, metadata artikel, dan header galley. Hindari nama institusi dalam judul jurnal.'}]},
+ {g:'B',gt:'Tata kelola dan keberagaman',grp:'tk',items:[
+  {k:'B.1',t:'Mitra bestari',max:6,o:[[6,'Rekam jejak internasional, 5 negara atau lebih, minimal 3 penelaah per naskah, ada bukti telaah'],[4,'Rekam jejak internasional, minimal 6 institusi dari 3 negara atau 8 institusi, 2 penelaah per naskah'],[2,'Rekam jejak minimal nasional, minimal 6 institusi, 2 penelaah per naskah'],[1,'Rekam jejak minimal nasional, minimal 4 institusi, 2 penelaah per naskah'],[0,'Tidak aktif atau tidak ada bukti telaah substantif']],
+   s:'Tambah mitra bestari dengan rekam jejak internasional 3 tahun terakhir dari lebih banyak negara, dan tugaskan minimal 3 penelaah per naskah dengan bukti telaah tercatat di OJS.'},
+  {k:'B.2',t:'Mutu telaah mitra bestari',max:4,o:[[4,'Telaah ketat dan substantif selama 3 tahun'],[2,'Saran kurang substantif'],[0,'Hanya komentar tata bahasa dan tata letak']],
+   s:'Pakai formulir telaah dengan butir substansi (kebaruan, metode, analisis, simpulan). Komentar yang hanya soal bahasa dan tata letak bernilai 0.'},
+  {k:'B.3',t:'Tim editor',max:5,o:[[5,'Rekam jejak internasional, 5 negara atau lebih, ada bukti aktivitas'],[3,'Rekam jejak internasional, minimal 2 negara atau 6 institusi'],[2,'Rekam jejak nasional, minimal 4 institusi'],[1,'Rekam jejak nasional, 2 institusi'],[0,'Tidak memenuhi kriteria di atas']],
+   s:'Rekrut editor dengan rekam jejak internasional dari berbagai negara dan pastikan setiap editor punya jejak penanganan naskah di sistem. Cek ambang h-index dan hindari pengangkatan ex-officio.'},
+  {k:'B.4',t:'Keberagaman asal penulis',max:6,o:[[6,'Penulis dari 5 negara atau lebih per nomor'],[4,'Minimal 2 negara atau 8 institusi per nomor'],[2,'Minimal 4 institusi per nomor'],[1,'Minimal 2 institusi per nomor'],[0,'Hanya 1 institusi']],
+   s:'Undang penulis dari institusi dan negara lain untuk setiap nomor, dan tulis afiliasi lengkap dengan negara. Penulis yang ditambahkan setelah accepted tidak dihitung.'},
+  {k:'B.5',t:'Pengelolaan artikel daring',max:1,o:[[1,'Seluruhnya lewat sistem manajemen jurnal'],[0.5,'Kombinasi sistem dan email'],[0,'Email saja']],
+   s:'Pindahkan seluruh proses (submission, telaah, keputusan, revisi) ke OJS dan hentikan pengelolaan lewat email.'}]},
+ {g:'C',gt:'Kelengkapan laman jurnal',grp:'tk',items:[
+  {k:'C.1',t:'Kebijakan proses telaah',max:2,o:[[2,'Menjelaskan semua proses telaah'],[1,'Menjelaskan sebagian'],[0,'Tidak tersedia atau tidak menjelaskan prinsip dasar']],
+   s:'Lengkapi kebijakan telaah: tipe blind, tahapan, kriteria, kualifikasi dan jumlah reviewer, tenggat, cek similaritas, dan cara keputusan diambil. Tautkan dari beranda.'},
+  {k:'C.2',t:'Petunjuk penulisan',max:1,o:[[1,'Rinci di laman dan ada template'],[0.5,'Rinci di laman, tanpa template'],[0,'Kurang lengkap atau hanya template']],
+   s:'Tulis petunjuk penulisan utuh di laman, bukan hanya tautan template, lalu sediakan file template.'},
+  {k:'C.3',t:'Kebijakan penggunaan AI',max:1,o:[[1,'Mengatur penulis, editor, dan larangan bagi reviewer'],[0.5,'Hanya mengatur sebagian'],[0,'Tidak ada atau hanya pernyataan umum']],
+   s:'Buat kebijakan AI yang mengatur kewajiban ungkap oleh penulis, batas penggunaan oleh editor, dan larangan penggunaan AI oleh reviewer.'},
+  {k:'C.4',t:'Kelengkapan laman (16 klausul COPE)',max:3,check:'cope',s:''}]},
+ {g:'D',gt:'Keberkalaan penerbitan',grp:'tk',items:[
+  {k:'D.1',t:'Jadwal penerbitan',max:2,o:[[2,'Ada prapublikasi dan semua nomor tepat periode'],[1.5,'Lebih dari 75% nomor tepat periode'],[1,'Lebih dari 25% sampai 75% tepat periode'],[0.5,'25% atau kurang tepat periode'],[0,'Abstract only atau menyisipkan artikel ke nomor lama']],
+   s:'Terbitkan tepat periode dan gunakan Issue in Progress atau Article in Press. Jangan menyisipkan artikel ke nomor lama atau terbit abstract only.'},
+  {k:'D.2',t:'Penomoran volume, nomor, halaman',max:1,o:[[1,'Bersistem baik dan konsisten'],[0.5,'Cukup baik atau cukup konsisten'],[0,'Kurang baik atau kurang konsisten']],
+   s:'Pakai angka Arab untuk volume dan nomor, mulai halaman dari 1 di setiap volume (atau ID artikel), dan jaga konsistensinya selama 3 tahun.'}]},
+ {g:'E',gt:'Penyebarluasan',grp:'tk',items:[
+  {k:'E.1',t:'Dampak ilmiah (sitasi 3 tahun)',max:6,o:[[6,'Lebih dari 25 sitasi pengindeks internasional atau lebih dari 75 basis DOI'],[4,'20 sampai 25, atau 31 sampai 75 basis DOI'],[3,'10 sampai 19, atau 11 sampai 30 basis DOI'],[2,'5 sampai 9, atau 5 sampai 10 basis DOI'],[1,'Kurang dari 5'],[0,'Tidak dapat diverifikasi']],
+   s:'Pastikan DOI terdaftar aktif agar sitasi terlacak (Scopus, WoS, atau Dimensions), lalu sebarkan artikel lewat jejaring peneliti. Sitasi diri yang berlebihan justru mengurangi nilai.'},
+  {k:'E.2',t:'Visibilitas jurnal',max:6,o:[[6,'Terindeks dan metadata terunggah di pengindeks bereputasi internasional'],[4,'Tercantum di pengindeks bereputasi internasional, metadata belum terindeks'],[3,'Terindeks di pengindeks bersistem seleksi'],[2,'Tercantum di pengindeks bersistem seleksi, metadata belum terindeks'],[1,'Terindeks di pengindeks tanpa sistem seleksi']],
+   s:'Ajukan ke pengindeks bersistem seleksi (misalnya DOAJ) lalu ke Scopus atau WoS, dan pantau agar metadata terunggah konsisten.'}]},
+ {g:'F',gt:'Mutu artikel (substansi)',grp:'ma',items:[
+  {k:'F.1',t:'Judul artikel',max:2,o:[[2,'Lugas dan memuat temuan penting'],[1,'Lugas, kurang memuat temuan'],[0,'Tidak lugas dan tidak memuat temuan']],s:'Arahkan penulis ke judul yang lugas dan memuat temuan penting; hindari lokasi riset kecuali menjadi fokus kajian.'},
+  {k:'F.2',t:'Abstrak',max:3,o:[[3,'Jelas dan ringkas dalam bahasa Inggris (dan Indonesia)'],[2,'Kurang jelas dan kurang ringkas'],[0,'Tidak jelas']],s:'Abstrak memuat tujuan, metode singkat, temuan, dan simpulan, tanpa rujukan; versi Inggris wajib.'},
+  {k:'F.3',t:'Kata kunci',max:1,o:[[1,'Mencerminkan konsep penting'],[0.5,'Kurang mencerminkan konsep'],[0,'Tidak ada']],s:'Pilih kata kunci yang mewakili konsep inti artikel dan mudah ditemukan mesin pencari.'},
+  {k:'F.4',t:'Kebaruan dan analisis kesenjangan',max:7,o:[[7,'Lengkap: state of the art, gap analysis, tujuan riset'],[5,'Dua dari tiga hal tersebut'],[3,'Satu dari tiga hal tersebut'],[1,'Kurang orisinal atau tanpa analisis kesenjangan']],s:'Pastikan pendahuluan memuat state of the art, analisis kesenjangan yang eksplisit, dan tujuan riset yang tegas.'},
+  {k:'F.5',t:'Analisis dan sintesis',max:8,o:[[8,'Metode, temuan, interpretasi, dan pembandingan semuanya ada'],[6,'Satu dari empat aspek tidak ada'],[4,'Dua dari empat aspek tidak ada'],[1,'Tiga dari empat aspek tidak ada']],s:'Perkuat pembahasan: metode yang memadai, interpretasi temuan yang dalam, dan pembandingan kritis dengan riset lain yang mutakhir.'},
+  {k:'F.6',t:'Penyimpulan',max:5,o:[[5,'Menjawab tujuan dan memuat implikasi'],[3,'Cukup menjawab tujuan'],[1,'Kurang menjawab tujuan']],s:'Simpulan menjawab tujuan dan menegaskan temuan baru, tanpa pembahasan ulang atau ulasan yang meluas.'},
+  {k:'F.7',t:'Nisbah sumber primer',max:3,o:[[3,'Lebih dari 80% primer, minimal 15 rujukan'],[2,'40 sampai 80% primer, minimal 15 rujukan'],[1,'Kurang dari 40% primer, minimal 15 rujukan'],[0.5,'Rujukan kurang dari 15']],s:'Tetapkan minimal 15 rujukan per artikel dengan lebih dari 80% sumber primer (artikel jurnal, prosiding, tesis, monograf).'},
+  {k:'F.8',t:'Kemutakhiran pustaka',max:3,o:[[3,'Lebih dari 80% terbit 10 tahun terakhir'],[2,'40 sampai 80%'],[1,'Kurang dari 40%']],s:'Dorong lebih dari 80% rujukan terbit dalam 10 tahun terakhir; karya klasik hanya untuk landasan konsep.'},
+  {k:'F.9',t:'Cakupan keilmuan',max:2,o:[[2,'100% artikel sesuai fokus dan skop'],[1.5,'90% sampai di bawah 100%'],[1,'80% sampai di bawah 90%'],[0.5,'Kurang dari 80%']],s:'Tolak sejak penyaringan awal naskah yang berada di luar fokus dan skop jurnal.'}]},
+ {g:'G',gt:'Gaya penulisan dan penyuntingan',grp:'ma',items:[
+  {k:'G.1',t:'Kelengkapan galley (9 unsur)',max:3,check:'galley',s:''},
+  {k:'G.2',t:'Nama dan afiliasi penulis',max:1,o:[[1,'Lengkap, benar, konsisten antar artikel'],[0.5,'Lengkap dan benar, tidak konsisten'],[0,'Tidak lengkap dan tidak konsisten']],s:'Nama penulis tanpa gelar dan tidak disingkat; afiliasi lengkap dengan kota dan negara, konsisten antar artikel.'},
+  {k:'G.3',t:'Sistematika penulisan',max:2,o:[[2,'Lengkap, bersistem, konsisten'],[1,'Lengkap, tidak konsisten'],[0.5,'Kurang lengkap, konsisten'],[0,'Kurang lengkap dan tidak konsisten']],s:'Seragamkan sistematika sesuai petunjuk penulisan: pendahuluan, metode, hasil dan pembahasan, simpulan.'},
+  {k:'G.4',t:'Instrumen pendukung',max:4,o:[[4,'Efektif dan komplementer'],[2,'Cukup efektif'],[0,'Tidak efektif']],s:'Perbaiki penyajian tabel, gambar, dan resolusinya, dan pastikan setiap instrumen dirujuk serta dijelaskan di teks.'},
+  {k:'G.5',t:'Sistem pengacuan pustaka',max:3,o:[[3,'Baku dan konsisten (100%)'],[2,'Cukup baku (75% sampai di bawah 100%)'],[0,'Tidak baku (kurang dari 75%)']],s:'Gunakan aplikasi pengelola referensi dan satu gaya sitasi; setiap rujukan di teks harus ada di daftar pustaka dan sebaliknya.'},
+  {k:'G.6',t:'Istilah dan kualitas bahasa',max:4,o:[[4,'Semua artikel baku dan benar'],[3,'75% sampai di bawah 100%'],[1,'50% sampai di bawah 75%'],[0,'Sebagian besar kurang baik']],s:'Perketat proofreading dan pakai istilah baku sesuai bidang ilmu.'},
+  {k:'G.7',t:'Mutu penyuntingan dan tata letak',max:3,o:[[3,'Sesuai standar dan konsisten'],[2,'Sesuai standar, tidak konsisten'],[1,'Kurang sesuai atau tidak konsisten']],s:'Jaga konsistensi gaya selingkung dan tata letak antar artikel dan antar nomor.'}]}
+];
+const DIS=[
+ {k:'H.1',t:'Pelanggaran integritas akademik',o:[[0,'Tidak ada temuan'],[-10,'1 artikel melanggar, tanpa koreksi atau retraksi'],[-15,'2 sampai 3 artikel'],[-20,'Lebih dari 3 artikel']],s:'Lakukan koreksi atau retraksi terbuka atas artikel bermasalah sebelum mengajukan, dan dokumentasikan penanganannya lima langkah.'},
+ {k:'H.2',t:'Ethical clearance',o:[[0,'Tercantum nomor EC, ada pernyataan kelaikan etik yang disetujui reviewer atau editor, atau tidak relevan'],[-3,'Riset dengan manusia atau hewan tanpa nomor dan tahun EC, dan tanpa pernyataan kelaikan etik yang disetujui reviewer atau editor']],s:'Riset berisiko sedang atau tinggi mencantumkan nomor dan tahun ethical clearance dari komite etik. Riset berisiko ringan atau tanpa risiko, misalnya wawancara biasa dengan informan dewasa, cukup dengan pernyataan mandiri penulis tentang kelaikan etik yang disetujui mitra bestari atau tim editor.'}
+];
+const ALL=[];U.forEach(g=>g.items.forEach(i=>{i.g=g.g;i.grp=g.grp;ALL.push(i)}));
+
+const KEY='simakred:v1';
+let store={journals:{},current:null};
+function load(){try{const r=localStorage.getItem(KEY);if(r)store=JSON.parse(r)}catch(e){} if(!store.journals||!Object.keys(store.journals).length){const id=uid();store={journals:{[id]:blank()},current:id}} if(!store.journals[store.current])store.current=Object.keys(store.journals)[0]}
+function save(){try{localStorage.setItem(KEY,JSON.stringify(store))}catch(e){}}
+function uid(){return 'j'+Date.now().toString(36)+Math.random().toString(36).slice(2,6)}
+function blank(){return {name:'',type:'ulang',field:'sosial',end:'',v:{},gate:{},cope:[],galley:[],dis:{'H.1':0,'H.2':0},rtl:{}}}
+function J(){return store.journals[store.current]}
+let step='awal';
+
+function copeVal(n){const p=n/16;return p>=1?3:p>=.75?2:p>=.5?1:0}
+function galVal(n){return n>=8?3:n>=6?2:n>=4?1:0.5}
+function itemVal(i,j){if(i.check==='cope')return copeVal(j.cope.length);if(i.check==='galley')return galVal(j.galley.length);const v=j.v[i.k];return (v===undefined||v===null)?null:v}
+
+function compute(j){
+ let tk=0,ma=0,filled=0;
+ ALL.forEach(i=>{const v=itemVal(i,j);if(v!==null){filled++; if(i.grp==='tk')tk+=v;else ma+=v}});
+ const di=(j.dis['H.1']||0)+(j.dis['H.2']||0);
+ const total=Math.max(0,Math.round((tk+ma+di)*10)/10);
+ const awalFail=AWAL.filter(a=>!(a.ulang&&j.type==='baru')&&j.gate[a.k]==='no');
+ const awalOpen=AWAL.filter(a=>!(a.ulang&&j.type==='baru')&&!j.gate[a.k]);
+ const layakFail=LAYAK.filter(a=>j.gate[a.k]==='no');
+ const layakOpen=LAYAK.filter(a=>!j.gate[a.k]);
+ return {tk:r1(tk),ma:r1(ma),di,total,filled,awalFail,awalOpen,layakFail,layakOpen};
+}
+function r1(x){return Math.round(x*10)/10}
+function rank(t){return t>=90?{n:1,l:'Peringkat 1'}:t>=80?{n:2,l:'Peringkat 2'}:t>=70?{n:3,l:'Peringkat 3'}:t>=60?{n:4,l:'Peringkat 4'}:{n:0,l:'Tidak terakreditasi'}}
+function fmt(x){return String(x).replace('.',',')}
+function esc(s){return String(s).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]))}
+
+function gaps(j){
+ const list=[];
+ ALL.forEach(i=>{const v=itemVal(i,j);const got=v===null?0:v;const g=r1(i.max-got);if(g>0)list.push({i,got,gap:g,empty:v===null})});
+ DIS.forEach(d=>{const v=j.dis[d.k]||0;if(v<0)list.push({i:{k:d.k,t:d.t,max:0,s:d.s},got:v,gap:-v,empty:false,dis:true})});
+ return list.sort((a,b)=>b.gap-a.gap);
+}
+function advice(i,j){
+ if(i.check==='cope'){const miss=COPE.filter((c,ix)=>!j.cope.includes(ix));return miss.length?'Klausul yang belum ada: '+miss.join('; ')+'. Satu klausul sebaiknya satu halaman yang mudah ditemukan dari menu About.':''}
+ if(i.check==='galley'){const miss=GALLEY.filter((c,ix)=>!j.galley.includes(ix));return miss.length?'Unsur yang belum ada di galley: '+miss.join('; ')+'. Perbarui template artikel agar semua nomor berikutnya lengkap.':''}
+ if(i.k==='B.3'){const h=j.field==='saintek'?'EiC minimal 7 dan anggota minimal 5':'EiC minimal 4 dan anggota minimal 3';return i.s+' Ambang h-index Scopus untuk bidang ini: '+h+'.'}
+ return i.s;
+}
+
+
+/* ---------- RTL ---------- */
+const HZ={1:{l:'Tahap 1: Segera',w:'0-1 bulan'},2:{l:'Tahap 2: Jangka pendek',w:'1-3 bulan'},3:{l:'Tahap 3: Jangka menengah',w:'3-6 bulan'},4:{l:'Tahap 4: Jangka panjang',w:'6-12 bulan, lintas nomor terbitan'}};
+const RTL={
+ 'A':{h:1,pj:'Managing Editor',a:['Cocokkan nama, singkatan, e-ISSN, dan penerbit di Settings > Journal > Masthead dengan data portal ISSN','Perbarui header template galley dan metadata artikel agar identik','Bila nama memuat nama lembaga lokal, kaji perubahan nama bersama penerbit (perubahan nama memerlukan ISSN baru)'],i:'Nama jurnal identik di laman, metadata, galley, dan portal ISSN'},
+ 'B.1':{h:4,pj:'Editor in Chief',a:['Petakan seluruh mitra bestari: rekam jejak publikasi 3 tahun, institusi, negara, keaktifan di OJS','Rekrut mitra bestari berekam jejak internasional hingga mencakup minimal 5 negara','Tetapkan minimal 3 penelaah per naskah di Workflow > Review','Pastikan semua undangan dan hasil telaah tercatat di OJS, bukan lewat email'],i:'Setiap naskah terbit memiliki minimal 3 telaah tercatat; mitra bestari dari minimal 5 negara'},
+ 'B.2':{h:3,pj:'Editor in Chief dan Section Editor',a:['Susun Review Form dengan butir substansi: kebaruan, metode, analisis, simpulan','Bagikan panduan telaah kepada seluruh mitra bestari','Kembalikan atau minta telaah ulang bila komentar hanya soal bahasa dan tata letak','Evaluasi mutu komentar telaah setiap selesai satu nomor'],i:'Seluruh telaah memuat komentar substantif yang tercatat di OJS'},
+ 'B.3':{h:3,pj:'Penerbit (Ketua PPPM/LP2M) dan Editor in Chief',a:['Audit h-index Scopus dan rekam jejak 3 tahun seluruh tim editor','Ganti atau tambah editor yang memenuhi ambang h-index bidang ini','Undang editor berekam jejak internasional dari minimal 5 negara, atas persetujuan tertulis','Tugaskan setiap editor menangani naskah nyata di OJS agar ada bukti aktivitas','Perbarui SK tim redaksi dan masthead OJS lengkap dengan tanggal mulai dan akhir peran'],i:'Tim editor memenuhi ambang h-index, berasal dari minimal 5 negara, dan aktif di sistem'},
+ 'B.4':{h:4,pj:'Managing Editor',a:['Sebarkan call for papers ke jejaring internasional, konferensi, dan komunitas pengelola jurnal','Minta editor dan mitra bestari luar negeri mengajak koleganya menulis','Batasi dominasi penulis dari satu institusi dalam satu nomor','Pastikan afiliasi penulis lengkap dengan kota dan negara'],i:'Setiap nomor memuat penulis dari minimal 5 negara'},
+ 'B.5':{h:1,pj:'Managing Editor',a:['Hentikan penerimaan dan pengelolaan naskah lewat email','Arahkan seluruh penulis, editor, dan mitra bestari ke OJS','Latih tim editor menjalankan alur Submission sampai Production di OJS'],i:'Seluruh proses naskah tercatat di OJS'},
+ 'C.1':{h:1,pj:'Managing Editor',a:['Tulis kebijakan telaah lengkap: tipe blind, tahapan, kriteria, kualifikasi dan jumlah penelaah, tenggat, cek similaritas, cara keputusan diambil','Tautkan halaman kebijakan dari beranda dan menu About'],i:'Halaman kebijakan telaah lengkap delapan unsur dan mudah ditemukan'},
+ 'C.2':{h:1,pj:'Managing Editor',a:['Tulis Author Guidelines utuh di laman, mencakup isi tiap bagian artikel','Sediakan file template yang dapat diunduh'],i:'Petunjuk penulisan rinci di laman dan template tersedia'},
+ 'C.3':{h:1,pj:'Managing Editor',a:['Buat halaman Kebijakan Penggunaan AI yang mengatur penulis, editor, dan mitra bestari','Cantumkan larangan penggunaan AI di Reviewer Guidance','Tambahkan pernyataan penggunaan AI ke submission checklist'],i:'Kebijakan AI tersedia dan mengatur tiga peran'},
+ 'C.4':{h:2,pj:'Managing Editor dan Journal Manager',a:[],i:'Seluruh 16 klausul COPE tersedia di laman jurnal'},
+ 'D.1':{h:2,pj:'Managing Editor',a:['Susun jadwal produksi internal mundur dari bulan terbit','Gunakan Issue in Progress atau prapublikasi untuk artikel yang sudah siap','Hentikan penyisipan artikel ke nomor lama dan penerbitan abstract only'],i:'Setiap nomor terbit tepat periode dengan prapublikasi'},
+ 'D.2':{h:1,pj:'Managing Editor',a:['Tetapkan satu pola penomoran: volume dan nomor berangka Arab, halaman dimulai dari 1 per volume atau ID artikel','Terapkan pola yang sama pada seluruh nomor berikutnya'],i:'Penomoran bersistem dan konsisten'},
+ 'E.1':{h:4,pj:'Tim Editor',a:['Pastikan DOI seluruh artikel terdaftar aktif dan daftar pustaka dideposit ke Crossref','Sebarkan artikel lewat Google Scholar, ResearchGate, media sosial, dan jejaring penulis','Pantau sitasi lewat Scopus, Dimensions, atau Google Scholar setiap semester','Hindari sitasi diri berlebihan dan permintaan sitasi yang dipaksakan'],i:'Jumlah sitasi 3 tahun terakhir naik ke rentang skor berikutnya'},
+ 'E.2':{h:3,pj:'Managing Editor dan Journal Manager',a:['Daftarkan jurnal ke pengindeks bersistem seleksi, misalnya DOAJ','Pastikan metadata terunggah konsisten di Garuda, Crossref, dan Dimensions','Siapkan pengusulan ke Scopus atau Web of Science setelah syarat teknis terpenuhi'],i:'Jurnal terindeks di pengindeks bersistem seleksi dan metadata konsisten'},
+ 'F.1':{h:2,pj:'Section Editor dan Copyeditor',a:['Masukkan kriteria judul lugas dan memuat temuan ke penyaringan awal','Minta penulis merevisi judul sebelum naskah dikirim ke telaah'],i:'Judul artikel lugas dan memuat temuan utama'},
+ 'F.2':{h:2,pj:'Section Editor dan Copyeditor',a:['Wajibkan abstrak memuat tujuan, metode, temuan, dan simpulan','Periksa kualitas bahasa Inggris abstrak sebelum produksi'],i:'Abstrak jelas dan ringkas dalam bahasa Inggris'},
+ 'F.3':{h:2,pj:'Section Editor',a:['Periksa kata kunci saat penyaringan awal agar mewakili konsep inti'],i:'Kata kunci mencerminkan konsep penting artikel'},
+ 'F.4':{h:2,pj:'Section Editor dan Mitra Bestari',a:['Tambahkan butir state of the art dan analisis kesenjangan ke Review Form','Kembalikan naskah yang pendahuluannya tidak memuat kesenjangan dan tujuan yang tegas'],i:'Pendahuluan memuat state of the art, analisis kesenjangan, dan tujuan'},
+ 'F.5':{h:2,pj:'Section Editor dan Mitra Bestari',a:['Perketat penilaian metode, interpretasi temuan, dan pembandingan dengan riset lain','Minta revisi mayor bila pembahasan hanya deskriptif'],i:'Pembahasan memuat metode, temuan, interpretasi, dan pembandingan'},
+ 'F.6':{h:2,pj:'Section Editor',a:['Pastikan simpulan menjawab tujuan dan menyebut implikasi, tanpa mengulang pembahasan'],i:'Simpulan menjawab tujuan dan memuat implikasi'},
+ 'F.7':{h:2,pj:'Section Editor',a:['Cantumkan aturan minimal 15 rujukan dengan lebih dari 80% sumber primer di Author Guidelines','Periksa jumlah dan jenis rujukan saat penyaringan awal'],i:'Setiap artikel minimal 15 rujukan, lebih dari 80% primer'},
+ 'F.8':{h:2,pj:'Section Editor',a:['Cantumkan aturan lebih dari 80% rujukan terbit 10 tahun terakhir di Author Guidelines','Periksa kemutakhiran rujukan saat penyaringan awal'],i:'Lebih dari 80% rujukan terbit 10 tahun terakhir'},
+ 'F.9':{h:2,pj:'Editor in Chief',a:['Pertegas focus and scope di laman','Lakukan desk reject untuk naskah di luar scope'],i:'Seluruh artikel sesuai fokus dan scope'},
+ 'G.1':{h:1,pj:'Layout Editor',a:[],i:'Galley seluruh artikel memuat 9 unsur kelengkapan'},
+ 'G.2':{h:1,pj:'Copyeditor',a:['Tulis nama penulis tanpa gelar dan tanpa singkatan di metadata dan galley','Seragamkan afiliasi: lembaga, kota, negara'],i:'Nama dan afiliasi lengkap, benar, dan konsisten'},
+ 'G.3':{h:2,pj:'Copyeditor',a:['Seragamkan sistematika artikel sesuai template sebelum produksi'],i:'Sistematika lengkap dan konsisten'},
+ 'G.4':{h:2,pj:'Layout Editor',a:['Perbaiki resolusi dan penomoran tabel serta gambar','Pastikan setiap tabel dan gambar dirujuk dan dijelaskan di teks'],i:'Instrumen pendukung efektif dan komplementer'},
+ 'G.5':{h:2,pj:'Copyeditor',a:['Wajibkan aplikasi pengelola referensi (Mendeley atau Zotero)','Cocokkan sitasi di teks dengan daftar pustaka sebelum produksi'],i:'Pengacuan pustaka baku dan konsisten 100%'},
+ 'G.6':{h:2,pj:'Proofreader',a:['Lakukan proofreading bahasa untuk setiap artikel','Susun daftar istilah baku bidang ilmu jurnal'],i:'Istilah dan bahasa baku pada seluruh artikel'},
+ 'G.7':{h:2,pj:'Layout Editor',a:['Gunakan satu template tata letak untuk seluruh artikel dan nomor','Periksa konsistensi tata letak sebelum terbit'],i:'Penyuntingan dan tata letak sesuai standar dan konsisten'},
+ 'H.1':{h:1,pj:'Editor in Chief dan Penerbit',a:['Telusuri artikel bermasalah dengan lima langkah: bukti awal, klarifikasi, investigasi, keputusan, tindakan korektif','Terbitkan koreksi atau retraksi terbuka, tanpa menghapus artikel','Mutakhirkan DOI dan metadata artikel yang dikoreksi atau ditarik','Dokumentasikan seluruh proses penanganan'],i:'Seluruh artikel bermasalah telah dikoreksi atau diretraksi secara terbuka'},
+ 'H.2':{h:1,pj:'Section Editor dan Mitra Bestari',a:['Wajibkan nomor dan tahun ethical clearance untuk riset berisiko sedang atau tinggi: pasien, anak, kelompok rentan, topik sensitif, atau intervensi','Untuk riset berisiko ringan seperti wawancara biasa dengan informan dewasa, sediakan template pernyataan mandiri kelaikan etik (persetujuan informan, kerahasiaan identitas, alasan tergolong risiko ringan)','Tambahkan butir "Apakah ethical clearance atau pernyataan kelaikan etik memadai?" ke Review Form agar persetujuan reviewer tercatat di OJS','Tambahkan butir etik ke submission checklist'],i:'Setiap riset dengan manusia atau hewan memuat nomor EC atau pernyataan kelaikan etik yang disetujui reviewer atau editor'}
+};
+const GATE_ACT={
+ a1:['Pastikan laman jurnal aktif, aman (https), dan dapat diakses publik'],
+ a2:['Samakan nama jurnal di laman dengan data portal ISSN'],
+ a3:['Samakan nama penerbit di laman dengan data portal ISSN'],
+ a4:['Pastikan jenis usulan tepat dan ajukan pada periode yang dibuka Dirjen'],
+ a5:['Terbitkan minimal 2 nomor per tahun sesuai frekuensi di data e-ISSN','Perbarui data frekuensi di portal ISSN bila berubah'],
+ a6:['Jaga keberkalaan 3 tahun berturut-turut dengan minimal 5 artikel per nomor'],
+ a7:['Tampilkan peringkat, nomor dan tanggal SK, serta tanggal akhir berlaku di beranda'],
+ a8:['Buat halaman etika publikasi yang mengacu COPE'],
+ a9:['Buat halaman biaya pemrosesan artikel, termasuk bila gratis'],
+ a10:['Daftarkan dan aktifkan DOI seluruh artikel di Distribution > DOIs'],
+ a11:['Unggah teks penuh PDF untuk setiap artikel'],
+ a12:['Tambah editor dari institusi lain'],
+ a13:['Tambah mitra bestari dari institusi lain'],
+ a14:['Siapkan akun asesor dan uji username serta password'],
+ a15:['Beri akun asesor peran editor di Users & Roles'],
+ l1:['Pastikan setiap artikel terbit memiliki bukti telaah sejawat di OJS'],
+ l2:['Benahi rekam jejak dan kepatuhan etika penerbit; tuntaskan kasus integritas yang terbuka']
+};
+function rtlActs(i,j){
+ const r=RTL[i.k]||{a:[i.s||'']};let a=r.a.slice();
+ if(i.k==='C.4'){const miss=COPE.filter((c,ix)=>!j.cope.includes(ix));a=['Buat halaman atau bagian di laman untuk klausul COPE yang belum ada: '+miss.join('; '),'Tautkan semuanya dari menu About']}
+ if(i.k==='G.1'){const miss=GALLEY.filter((c,ix)=>!j.galley.includes(ix));a=['Perbarui template artikel agar memuat: '+miss.join('; '),'Terapkan template baru mulai nomor berikutnya']}
+ if(i.k==='B.3'){const h=j.field==='saintek'?'EiC minimal 7, anggota minimal 5':'EiC minimal 4, anggota minimal 3';a=a.map(x=>x.replace('ambang h-index bidang ini','ambang h-index bidang ini ('+h+')'))}
+ return a;
+}
+function buildRtl(j){
+ const c=compute(j),rk=rank(c.total);
+ const items=[];
+ const gates=[...c.awalFail,...c.layakFail];
+ gates.forEach(g=>items.push({gate:true,k:'Gerbang',t:g.t,h:(g.k==='a5'||g.k==='a6')?4:1,pj:g.k==='l2'?'Penerbit (Ketua PPPM/LP2M)':'Managing Editor dan Journal Manager',a:GATE_ACT[g.k]||[g.d],ind:g.d.replace(/\.$/,''),gap:0,cur:'Belum terpenuhi'}));
+ gaps(j).forEach(x=>{if(x.empty)return;const r=RTL[x.i.k]||{h:2,pj:'Tim Editor',i:''};items.push({k:x.i.k,t:x.i.t,h:r.h,pj:r.pj,a:x.dis?(RTL[x.i.k]?RTL[x.i.k].a:[x.i.s]):rtlActs(x.i,j),ind:r.i,gap:x.gap,dis:!!x.dis,cur:x.dis?fmt(x.got):fmt(x.got)+' / '+fmt(x.i.max)})});
+ items.sort((a,b)=>(a.gate?0:1)-(b.gate?0:1)||a.h-b.h||b.gap-a.gap);
+ const empty=gaps(j).filter(x=>x.empty).map(x=>x.i.k);
+ let run=c.total;const proj=[1,2,3,4].map(h=>{const pts=r1(items.filter(x=>x.h===h).reduce((s,x)=>s+x.gap,0));run=r1(Math.min(100,run+pts));return {h,pts,score:run,rank:rank(run).l,n:items.filter(x=>x.h===h).length}});
+ const lossTK=r1(46-c.tk),lossMA=r1(54-c.ma);
+ let months=null,deadline=null;
+ if(j.type==='ulang'&&j.end){const d=new Date(j.end+'T00:00:00');deadline=new Date(d);deadline.setMonth(deadline.getMonth()-6);months=Math.round((deadline-new Date())/(864e5*30.4))}
+ const S=[];
+ S.push(`Nilai simulasi saat ini ${fmt(c.total)} (${rk.l}). Standar tata kelola kehilangan ${fmt(lossTK)} dari 46 poin, standar mutu artikel kehilangan ${fmt(lossMA)} dari 54 poin${c.di<0?', ditambah disinsentif '+fmt(c.di)+' poin':''}.`);
+ if(gates.length)S.push(`Prioritas mutlak: ${gates.length} syarat pemeriksaan belum terpenuhi (${gates.map(g=>g.t).join(', ')}). Selama syarat ini belum dipenuhi, usulan tidak akan dinilai sehingga nilai di atas belum berarti apa-apa.`);
+ if(c.di<0)S.push('Tuntaskan disinsentif lebih dulu lewat koreksi atau retraksi terbuka. Satu artikel bermasalah memotong 10 poin, setara dengan beberapa sub-unsur tata kelola sekaligus.');
+ const p1=proj[0],p2=proj[1];
+ if(p1.pts>0)S.push(`Mulai dari ${p1.n} kegiatan Tahap 1 yang bisa selesai dalam sebulan, sebagian besar berupa kebijakan dan pengaturan laman. Potensinya ${fmt(p1.pts)} poin, membawa simulasi ke ${fmt(p1.score)} (${p1.rank}).`);
+ if(p2.pts>0)S.push(`Tahap 2 berfokus pada penyuntingan dan penyaringan naskah. Dampaknya baru terlihat pada nomor-nomor yang terbit setelah perbaikan, sehingga perlu diterapkan sejak nomor terdekat.`);
+ const longs=items.filter(x=>x.h>=3&&!x.gate);
+ if(longs.length)S.push(`Sub-unsur ${longs.map(x=>x.k).join(', ')} bergantung pada jejaring, rekrutmen, dan sitasi. Hasilnya butuh waktu, jadi kegiatannya perlu dimulai sekarang bersamaan dengan Tahap 1.`);
+ if(j.type==='ulang')S.push('Akreditasi ulang menilai tiga nomor terakhir. Perbaikan mutu artikel dan tata kelola harus konsisten di tiga nomor tersebut, bukan hanya pada satu nomor terbaik.');
+ if(months!==null){if(months<0)S.push('Batas pengajuan akreditasi ulang sudah lewat. Tanpa pengajuan tepat waktu tidak ada perpanjangan sementara, jadi segera konsultasikan status jurnal ke pengelola ARJUNA.');else S.push(`Sisa waktu sampai batas pengajuan akreditasi ulang sekitar ${months} bulan. ${months<6?'Waktu ini tidak cukup untuk kegiatan jangka menengah dan panjang; dahulukan Tahap 1 dan 2 agar nomor yang diajukan sudah memuat perbaikan.':'Waktu ini cukup untuk menuntaskan Tahap 1 sampai 3 sebelum pengajuan bila dimulai sekarang.'}`)}
+ const tgt=j.rtl&&j.rtl.target?+j.rtl.target:0;
+ if(tgt){const th=[0,90,80,70,60][tgt];const need=r1(th-c.total);if(need<=0)S.push(`Target Peringkat ${tgt} sudah tercapai dalam simulasi. Fokus pada mempertahankan konsistensi tiga nomor terakhir.`);else{const hit=proj.find(p=>p.score>=th);S.push(`Target Peringkat ${tgt} membutuhkan tambahan ${fmt(need)} poin. ${hit?'Menurut proyeksi, target tercapai setelah '+HZ[hit.h].l+'.':'Proyeksi seluruh tahap belum mencapai target; perlu perbaikan mendasar pada mutu artikel dan keberagaman.'}`)}}
+ if(empty.length)S.push(`${empty.length} sub-unsur belum dinilai (${empty.join(', ')}) dan tidak dihitung dalam proyeksi.`);
+ return {c,rk,items,proj,S,deadline,empty};
+}
+function renderRtl(j){
+ const R=buildRtl(j);const r=j.rtl||{};
+ const prow=R.proj.map(p=>`<tr><td>${HZ[p.h].l}</td><td>${HZ[p.h].w}</td><td class="n">${p.n}</td><td class="n">+${fmt(p.pts)}</td><td class="n"><b>${fmt(p.score)}</b></td><td>${p.rank}</td></tr>`).join('');
+ const groups=[1,2,3,4].map(h=>{const its=R.items.filter(x=>x.h===h);if(!its.length)return '';return `<h4 class="rtl-h">${HZ[h].l} <span>${HZ[h].w}</span></h4>`+its.map(x=>`<div class="rec"><div class="rh"><span>${x.gate?'Syarat: ':x.k+' '}${esc(x.t)}</span><span class="lost">${x.gate?'syarat':'+'+fmt(x.gap)+' poin'}</span></div><ol class="rtl-a">${x.a.map(a=>`<li>${esc(a)}</li>`).join('')}</ol><p class="note"><b>Penanggung jawab:</b> ${esc(x.pj)}. <b>Indikator:</b> ${esc(x.ind)}.</p></div>`).join('')}).join('');
+ return `<div class="group"><h3>Rencana Tindak Lanjut</h3><span class="pts">${R.items.length} kegiatan</span></div>
+ <div class="meta" style="margin-top:12px"><div class="field"><label for="rtlPengisi">Nama pengisi</label><input id="rtlPengisi" type="text" value="${esc(r.pengisi||'')}" placeholder="Untuk dicantumkan di PDF"></div>
+ <div class="field"><label for="rtlJabatan">Jabatan di jurnal</label><input id="rtlJabatan" type="text" value="${esc(r.jabatan||'')}" placeholder="Contoh: Managing Editor"></div>
+ <div class="field"><label for="rtlTarget">Target peringkat</label><select id="rtlTarget"><option value="">Belum ditentukan</option>${[1,2,3,4].map(n=>`<option value="${n}" ${String(r.target)===String(n)?'selected':''}>Peringkat ${n}</option>`).join('')}</select></div></div>
+ <h4 class="rtl-h">Strategi peningkatan</h4><ul class="rtl-s">${R.S.map(s=>`<li>${esc(s)}</li>`).join('')}</ul>
+ <h4 class="rtl-h">Proyeksi nilai per tahap</h4><div class="table-wrap"><table class="cmp"><tr><th>Tahap</th><th>Rentang</th><th>Kegiatan</th><th>Potensi</th><th>Proyeksi nilai</th><th>Proyeksi status</th></tr><tr><td>Kondisi saat ini</td><td>-</td><td class="n">-</td><td class="n">-</td><td class="n"><b>${fmt(R.c.total)}</b></td><td>${R.rk.l}</td></tr>${prow}</table></div>
+ <p class="note">Proyeksi mengasumsikan setiap kegiatan berhasil mencapai nilai maksimal sub-unsurnya. Hasil nyata bergantung pada penilaian asesor.</p>
+ ${groups||'<div class="rec full"><div class="rh"><span>Tidak ada kegiatan perbaikan; semua sub-unsur yang dinilai sudah maksimal</span></div></div>'}
+ <div class="pdfrow" data-pdfrow style="max-width:360px;margin-top:18px"><button class="btn primary" type="button" data-pdf>Unduh hasil simulasi dan RTL (PDF)</button><span class="pdfmsg" role="status"></span></div>`;
+}
+
+/* ---------- render ---------- */
+function renderSteps(){
+ const nav=document.getElementById('steps');
+ nav.innerHTML=STEPS.map((s,ix)=>`<button type="button" data-step="${s.id}" aria-current="${s.id===step}"><span class="n">${ix+1}</span>${s.t}</button>`).join('');
+ nav.querySelectorAll('button').forEach(b=>b.onclick=()=>{step=b.dataset.step;renderSteps();renderStep();window.scrollTo({top:document.getElementById('steps').offsetTop-70,behavior:'smooth'})});
+}
+function gateRow(a,j){
+ const v=j.gate[a.k];
+ return `<div class="gate"><div><div class="g-title">${a.t}</div><div class="g-desc">${a.d}</div></div>
+ <div class="seg" role="group" aria-label="${esc(a.t)}"><button type="button" data-gate="${a.k}" data-val="yes" class="${v==='yes'?'on-yes':''}" aria-pressed="${v==='yes'}">Terpenuhi</button><button type="button" data-gate="${a.k}" data-val="no" class="${v==='no'?'on-no':''}" aria-pressed="${v==='no'}">Belum</button></div></div>`;
+}
+function itemCard(i,j){
+ const v=itemVal(i,j);
+ let body='';
+ if(i.check){
+  const src=i.check==='cope'?COPE:GALLEY;const arr=j[i.check];
+  body=`<div class="checks">${src.map((c,ix)=>`<label class="check"><input type="checkbox" data-chk="${i.check}" data-ix="${ix}" ${arr.includes(ix)?'checked':''}><span>${c}</span></label>`).join('')}</div>
+  <p class="note">${i.check==='cope'?`${arr.length} dari 16 klausul terpenuhi. 100% = 3, 75% ke atas = 2, 50% ke atas = 1.`:`${arr.length} dari 9 unsur ada. 8-9 = 3, 6-7 = 2, 4-5 = 1, 3 ke bawah = 0,5.`}</p>`;
+ }else{
+  body=`<div class="opts" role="radiogroup" aria-label="${esc(i.k+' '+i.t)}">${i.o.map(([val,lab])=>`<label class="opt ${v===val?'sel':''}"><input type="radio" name="${i.k}" data-k="${i.k}" value="${val}" ${v===val?'checked':''}><span>${lab}</span><span class="v">${fmt(val)}</span></label>`).join('')}</div>`;
+  if(i.k==='B.3')body+=`<p class="note">Ambang h-index Scopus: ${j.field==='saintek'?'EiC minimal 7, anggota minimal 5':'EiC minimal 4, anggota minimal 3'}.</p>`;
+ }
+ return `<div class="item"><div class="item-head"><div><span class="code">${i.k}</span><span class="t">${i.t}</span></div><span class="score ${v===null?'empty':''}">${v===null?'belum diisi':fmt(v)+' / '+fmt(i.max)}</span></div>${body}</div>`;
+}
+function renderStep(){
+ const j=J();const host=document.getElementById('stepHost');const c=compute(j);
+ const ix=STEPS.findIndex(s=>s.id===step);
+ let h='';
+ if(step==='awal'){
+  const list=AWAL.filter(a=>!(a.ulang&&j.type==='baru'));
+  h=`<section class="step active"><h2>Pemeriksaan Awal</h2><p class="lead">Syarat administratif dan teknis. Satu butir tidak terpenuhi, usulan berhenti di tahap ini dan tidak dinilai.</p><div class="box">${list.map(a=>gateRow(a,j)).join('')}</div>`;
+ }else if(step==='layak'){
+  h=`<section class="step active"><h2>Pemeriksaan Kelayakan</h2><p class="lead">Tahap baru dalam aturan 2026. Jurnal yang tidak lolos baru bisa mengusulkan lagi paling cepat 2 tahun setelah penetapan.</p><div class="box">${LAYAK.map(a=>gateRow(a,j)).join('')}</div>`;
+ }else if(step==='tk'||step==='ma'){
+  const gs=U.filter(g=>g.grp===step);
+  h=`<section class="step active"><h2>${step==='tk'?'Standar tata kelola':'Standar mutu artikel'}</h2><p class="lead">${step==='tk'?'Unsur A sampai E, bobot 46. Pilih kondisi yang paling mendekati jurnal Anda pada 3 tahun terakhir.':'Unsur F dan G, bobot 54. Nilai berdasarkan artikel pada nomor-nomor yang diajukan.'}</p>`+
+   gs.map(g=>{const got=r1(g.items.reduce((s,i)=>s+(itemVal(i,j)||0),0));const mx=g.items.reduce((s,i)=>s+i.max,0);return `<div class="group"><h3>${g.g}. ${g.gt}</h3><span class="pts">${fmt(got)} / ${mx}</span></div>`+g.items.map(i=>itemCard(i,j)).join('')}).join('');
+ }else if(step==='dis'){
+  h=`<section class="step active"><h2>Disinsentif</h2><p class="lead">Pengurang nilai untuk pelanggaran integritas dan ketiadaan ethical clearance pada nomor yang diajukan.</p>`+
+   DIS.map(d=>{const v=j.dis[d.k]||0;return `<div class="item"><div class="item-head"><div><span class="code">${d.k}</span><span class="t">${d.t}</span></div><span class="score">${fmt(v)}</span></div><div class="opts" role="radiogroup" aria-label="${esc(d.t)}">${d.o.map(([val,lab])=>`<label class="opt ${v===val?'sel':''}"><input type="radio" name="${d.k}" data-dis="${d.k}" value="${val}" ${v===val?'checked':''}><span>${lab}</span><span class="v">${fmt(val)}</span></label>`).join('')}</div></div>`}).join('');
+ }else{
+  h=renderHasil(j,c);
+ }
+ h+=`<div class="navrow">${ix>0?`<button class="btn" type="button" id="prevB">Kembali</button>`:'<span></span>'}${ix<STEPS.length-1?`<button class="btn primary" type="button" id="nextB">Lanjut ke ${STEPS[ix+1].t}</button>`:''}</div></section>`;
+ host.innerHTML=h;
+ bindStep();
+}
+function renderHasil(j,c){
+ const rk=rank(c.total);const gl=gaps(j);
+ let status='';
+ if(c.awalFail.length){const fr=c.awalFail.some(a=>a.fr);status+=`<div class="alert bad"><b>Tidak lolos Pemeriksaan Awal</b>Butir belum terpenuhi: ${c.awalFail.map(a=>a.t).join(', ')}. ${fr?'Karena menyangkut frekuensi atau keberkalaan, pengusulan kembali tidak bisa langsung di periode berikutnya.':'Pengusulan kembali dapat dilakukan pada periode berikutnya setelah diperbaiki.'}</div>`}
+ else if(c.layakFail.length){status+=`<div class="alert bad"><b>Tidak lolos Pemeriksaan Kelayakan</b>${c.layakFail.map(a=>a.t).join(', ')}. Pengusulan kembali paling cepat 2 tahun sejak penetapan.</div>`}
+ else if(c.awalOpen.length||c.layakOpen.length){status+=`<div class="alert warn"><b>Pemeriksaan belum lengkap</b>Masih ada ${c.awalOpen.length+c.layakOpen.length} butir pemeriksaan yang belum ditandai.</div>`}
+ else{status+=`<div class="alert ok"><b>Lolos Pemeriksaan Awal dan Kelayakan</b>Usulan berlanjut ke penilaian.</div>`}
+ if(rk.n===0&&c.filled===ALL.length){status+=`<div class="alert warn" style="margin-top:10px"><b>Nilai di bawah 60</b>${c.di<0?'Karena ada disinsentif, pengajuan kembali paling cepat 3 tahun sejak penetapan.':'Pengajuan kembali setelah terbit paling sedikit 3 nomor baru sejak nomor terakhir yang dinilai.'}</div>`}
+ const recs=gl.map(x=>{const a=x.dis?x.i.s:advice(x.i,j);return `<div class="rec"><div class="rh"><span>${x.i.k} ${x.i.t}</span><span class="lost">${x.empty?'belum diisi':(x.dis?'':'kurang ')+fmt(x.gap)+' poin'}</span></div><p>${esc(a)}</p></div>`}).join('');
+ const full=ALL.filter(i=>itemVal(i,j)===i.max).map(i=>i.k);
+ const cmp=Object.entries(store.journals).map(([id,jj])=>{const cc=compute(jj);const rr=rank(cc.total);const gate=cc.awalFail.length?'Gugur awal':cc.layakFail.length?'Gugur kelayakan':'Lolos';return `<tr><td>${esc(jj.name||'Tanpa nama')}${id===store.current?' (aktif)':''}</td><td>${gate}</td><td class="n">${fmt(cc.tk)}</td><td class="n">${fmt(cc.ma)}</td><td class="n">${fmt(cc.di)}</td><td class="n"><b>${fmt(cc.total)}</b></td><td>${rr.l}</td></tr>`}).join('');
+ return `<section class="step active"><h2>Hasil simulasi, potensi nilai, dan Rencana Tindak Lanjut</h2><p class="lead">Saran diurutkan dari sub-unsur yang paling banyak kehilangan poin.</p>${status}
+ ${renderRekap(j)}
+ <div class="group"><h3>Saran per sub-unsur</h3><span class="pts">${gl.length} perlu perbaikan</span></div>
+ <div class="recs">${recs||'<div class="rec full"><div class="rh"><span>Semua sub-unsur bernilai maksimal</span></div></div>'}</div>
+ ${full.length?`<p class="note">Sudah maksimal: ${full.join(', ')}.</p>`:''}
+ ${renderRtl(j)}
+ <div class="group"><h3>Perbandingan jurnal tersimpan</h3><span class="pts">${Object.keys(store.journals).length} jurnal</span></div>
+ <div class="table-wrap"><table class="cmp"><tr><th>Jurnal</th><th>Pemeriksaan</th><th>Tata kelola</th><th>Mutu artikel</th><th>Disinsentif</th><th>Total</th><th>Status</th></tr>${cmp}</table></div>
+ <div class="group"><h3>Ringkasan untuk disalin</h3></div>
+ <textarea class="summary" readonly aria-label="Ringkasan hasil">${esc(summaryText(j,c,rk,gl))}</textarea></section>`;
+}
+function summaryText(j,c,rk,gl){
+ const lines=[`Simulasi akreditasi: ${j.name||'Tanpa nama'}`,`Jenis usulan: ${j.type==='ulang'?'Akreditasi ulang':'Akreditasi baru'}`,`Nilai total: ${fmt(c.total)} (${rk.l})`,`Tata kelola ${fmt(c.tk)}/46, mutu artikel ${fmt(c.ma)}/54, disinsentif ${fmt(c.di)}`];
+ if(c.awalFail.length)lines.push('Gugur Pemeriksaan Awal: '+c.awalFail.map(a=>a.t).join(', '));
+ if(c.layakFail.length)lines.push('Gugur Pemeriksaan Kelayakan: '+c.layakFail.map(a=>a.t).join(', '));
+ lines.push('','Prioritas perbaikan:');
+ gl.slice(0,5).forEach((x,ix)=>lines.push(`${ix+1}. ${x.i.k} ${x.i.t} (${x.empty?'belum diisi':'kurang '+fmt(x.gap)+' poin'})`));
+ return lines.join('\n');
+}
+function renderPanel(){
+ const j=J();const c=compute(j);const rk=rank(c.total);
+ document.getElementById('tNum').textContent=fmt(c.total);
+ document.getElementById('tRank').textContent=rk.l;
+ const next=rk.n===1?null:rk.n===0?60:[0,0,90,80,70][rk.n];
+ document.getElementById('tNext').textContent=next?`Butuh ${fmt(r1(next-c.total))} poin lagi untuk ${rank(next).l}.`:'Sudah di peringkat tertinggi.';
+ document.getElementById('marker').style.left=Math.min(100,c.total)+'%';
+ document.getElementById('sTK').textContent=fmt(c.tk);document.getElementById('sMA').textContent=fmt(c.ma);document.getElementById('sDI').textContent=fmt(c.di);
+ document.getElementById('prog').textContent=`${c.filled} dari ${ALL.length} sub-unsur sudah dinilai.`;
+ document.getElementById('miniName').textContent=j.name||'Jurnal tanpa nama';
+ document.getElementById('miniScore').textContent=`${fmt(c.total)} | ${rk.l}`;
+ let ga='';
+ if(c.awalFail.length)ga=`<div class="alert bad"><b>Gugur di Pemeriksaan Awal</b>${c.awalFail.length} butir belum terpenuhi. Nilai di atas hanya gambaran bila syarat dipenuhi.</div>`;
+ else if(c.layakFail.length)ga=`<div class="alert bad"><b>Gugur di Pemeriksaan Kelayakan</b>Pengusulan kembali paling cepat 2 tahun.</div>`;
+ document.getElementById('gateAlert').innerHTML=ga;
+ const gl=gaps(j).filter(x=>!x.empty).slice(0,5);
+ document.getElementById('prio').innerHTML=`<h4>Lima selisih terbesar</h4>${gl.length?`<ol>${gl.map(x=>`<li>${x.i.k} ${x.i.t} <span class="gap">-${fmt(x.gap)}</span></li>`).join('')}</ol>`:'<p class="rank-note">Isi penilaian untuk melihat prioritas perbaikan.</p>'}`;
+}
+function renderMeta(){
+ const j=J();
+ document.getElementById('jName').value=j.name;document.getElementById('jType').value=j.type;document.getElementById('jField').value=j.field;document.getElementById('jEnd').value=j.end||'';
+ document.getElementById('endWrap').style.display=j.type==='ulang'?'':'none';
+ document.getElementById('hHint').textContent=j.field==='saintek'?'Ambang h-index: EiC 7, editor 5.':'Ambang h-index: EiC 4, editor 3.';
+ const eh=document.getElementById('endHint');
+ if(j.end){const d=new Date(j.end+'T00:00:00');const b=new Date(d);b.setMonth(b.getMonth()-6);const today=new Date();today.setHours(0,0,0,0);const days=Math.round((b-today)/864e5);
+  const f=x=>x.toLocaleDateString('id-ID',{day:'numeric',month:'long',year:'numeric'});
+  eh.textContent=`Batas akhir pengajuan: ${f(b)}. `+(days>=0?`Tersisa ${days} hari.`:`Sudah lewat ${-days} hari; tanpa pengajuan tepat waktu tidak ada perpanjangan sementara.`);
+  eh.style.color=days<0?'var(--bad)':days<90?'var(--warn)':'';
+ }else{eh.textContent='Isi untuk menghitung batas pengajuan akreditasi ulang.';eh.style.color=''}
+ const sel=document.getElementById('journalSelect');
+ sel.innerHTML=Object.entries(store.journals).map(([id,jj])=>`<option value="${id}" ${id===store.current?'selected':''}>${esc(jj.name||'Tanpa nama')}</option>`).join('');
+}
+function refresh(full){save();renderPanel();renderMeta();if(full)renderStep();}
+
+function bindStep(){
+ const j=J();
+ const rt=()=>{if(!j.rtl)j.rtl={};return j.rtl};
+ const ip=document.getElementById('rtlPengisi'),ij=document.getElementById('rtlJabatan'),it=document.getElementById('rtlTarget');
+ if(ip)ip.oninput=()=>{rt().pengisi=ip.value;save()};
+ if(ij)ij.oninput=()=>{rt().jabatan=ij.value;save()};
+ if(it)it.onchange=()=>{rt().target=it.value;save();renderStep()};
+ document.querySelectorAll('[data-pdf]').forEach(b=>b.onclick=downloadPdf);
+ document.querySelectorAll('[data-gate]').forEach(b=>b.onclick=()=>{const k=b.dataset.gate;j.gate[k]=j.gate[k]===b.dataset.val?undefined:b.dataset.val;refresh(true)});
+ document.querySelectorAll('input[data-k]').forEach(r=>r.onchange=()=>{j.v[r.dataset.k]=parseFloat(r.value);refresh(true)});
+ document.querySelectorAll('input[data-dis]').forEach(r=>r.onchange=()=>{j.dis[r.dataset.dis]=parseFloat(r.value);refresh(true)});
+ document.querySelectorAll('input[data-chk]').forEach(cb=>cb.onchange=()=>{const arr=j[cb.dataset.chk];const ix=+cb.dataset.ix;const p=arr.indexOf(ix);if(cb.checked&&p<0)arr.push(ix);if(!cb.checked&&p>=0)arr.splice(p,1);refresh(true)});
+ const ix=STEPS.findIndex(s=>s.id===step);
+ const pb=document.getElementById('prevB'),nb=document.getElementById('nextB');
+ const go=s=>{step=s;renderSteps();renderStep();window.scrollTo({top:document.getElementById('steps').offsetTop-70,behavior:'smooth'})};
+ if(pb)pb.onclick=()=>go(STEPS[ix-1].id);
+ if(nb)nb.onclick=()=>go(STEPS[ix+1].id);
+}
+
+document.getElementById('jName').oninput=e=>{J().name=e.target.value;save();renderPanel();const o=document.querySelector('#journalSelect option[value="'+store.current+'"]');if(o)o.textContent=e.target.value||'Tanpa nama'};
+document.getElementById('jName').onchange=()=>refresh(step==='hasil');
+document.getElementById('jType').onchange=e=>{J().type=e.target.value;refresh(true)};
+document.getElementById('jField').onchange=e=>{J().field=e.target.value;refresh(true)};
+document.getElementById('jEnd').onchange=e=>{J().end=e.target.value;refresh(false)};
+document.getElementById('journalSelect').onchange=e=>{store.current=e.target.value;refresh(true)};
+document.getElementById('newJournal').onclick=()=>{const id=uid();store.journals[id]=blank();store.current=id;step='awal';renderSteps();refresh(true);document.getElementById('jName').focus()};
+let delArm=null;document.getElementById('delJournal').onclick=()=>{const b=document.getElementById('delJournal');if(!delArm){b.textContent='Klik lagi untuk menghapus';delArm=setTimeout(()=>{delArm=null;b.textContent='Hapus'},4000);return}clearTimeout(delArm);delArm=null;b.textContent='Hapus';delete store.journals[store.current];if(!Object.keys(store.journals).length){const id=uid();store.journals[id]=blank()}store.current=Object.keys(store.journals)[0];refresh(true)};
+
+
+const BRAND=''; const RGB=[42,79,176];
+let DL=null;
+(function initDL(n){if(window.claude&&typeof window.claude.use==='function'){window.claude.use('downloads').then(d=>{DL=d;showPdf()}).catch(()=>{})}else if(n<20){setTimeout(()=>initDL(n+1),500)}})(0);
+function showPdf(){}
+function optLabel(i,j){if(i.check==='cope')return j.cope.length+' dari 16 klausul COPE';if(i.check==='galley')return j.galley.length+' dari 9 unsur galley';const v=j.v[i.k];if(v===undefined||v===null)return 'Belum diisi';const o=i.o.find(x=>x[0]===v);return o?o[1]:''}
+function rekap(j){
+ const c=compute(j);
+ const rows=U.map(g=>{const mx=g.items.reduce((s,i)=>s+i.max,0);const got=r1(g.items.reduce((s,i)=>s+(itemVal(i,j)||0),0));const empty=g.items.filter(i=>itemVal(i,j)===null).length;return {k:g.g,t:g.gt,grp:g.grp,mx,got,gap:r1(mx-got),pct:Math.round(got/mx*100),empty}});
+ return {c,rows};
+}
+function hzOf(k){return RTL[k]?RTL[k].h:2}
+function buildPdf(j){
+ const {jsPDF}=window.jspdf;const doc=new jsPDF({unit:'mm',format:'a4'});
+ const R=buildRtl(j);const c=R.c,rk=R.rk;const r=j.rtl||{};const M=16,W=210-2*M;let y=18;
+ const RK=rekap(j).rows;
+ const tgl=x=>x.toLocaleDateString('id-ID',{day:'numeric',month:'long',year:'numeric'});
+ const H=(t,s)=>{if(y>255){doc.addPage();y=20}doc.setTextColor(RGB[0],RGB[1],RGB[2]);doc.setFont('helvetica','bold');doc.setFontSize(s||13);doc.text(t,M,y);doc.setTextColor(24,38,58);y+=6};
+ const P=(t,opt)=>{doc.setFont('helvetica',opt&&opt.b?'bold':'normal');doc.setFontSize(opt&&opt.s||10);const l=doc.splitTextToSize(t,W-(opt&&opt.ind||0));if(y+l.length*4.8>280){doc.addPage();y=20}doc.text(l,M+(opt&&opt.ind||0),y);y+=l.length*4.8+(opt&&opt.gap!=null?opt.gap:2)};
+ const T=(o)=>{doc.autoTable(Object.assign({startY:y,margin:{left:M,right:M},styles:{fontSize:8.5,cellPadding:2,valign:'top',textColor:[24,38,58],lineColor:[221,227,230],lineWidth:.1},headStyles:{fillColor:RGB,textColor:255},theme:'grid'},o));y=doc.lastAutoTable.finalY+8};
+ const SUB={fontStyle:'bold',fillColor:[238,242,240]};
+ // header
+ doc.setTextColor(RGB[0],RGB[1],RGB[2]);doc.setFont('helvetica','bold');doc.setFontSize(10);
+ if(BRAND){doc.text(BRAND,M,y);y+=6}
+ doc.setTextColor(24,38,58);doc.setFontSize(17);doc.text('Hasil Simulasi Akreditasi Jurnal Ilmiah',M,y);y+=6;
+ doc.setFont('helvetica','normal');doc.setFontSize(11);doc.text('Evaluasi, potensi nilai, dan Rencana Tindak Lanjut',M,y);y+=8;
+ doc.setFontSize(10);
+ const meta=[['Jurnal',j.name||'Tanpa nama'],['Jenis usulan',j.type==='ulang'?'Akreditasi ulang':'Akreditasi baru'],['Kelompok bidang',j.field==='saintek'?'Sains, teknologi, kesehatan':'Ilmu sosial'],['Pengisi',(r.pengisi||'-')+(r.jabatan?' ('+r.jabatan+')':'')],['Tanggal evaluasi',tgl(new Date())]];
+ if(r.target)meta.push(['Target peringkat','Peringkat '+r.target]);
+ if(R.deadline)meta.push(['Batas pengajuan ulang',tgl(R.deadline)]);
+ meta.forEach(([a,b])=>{doc.setFont('helvetica','bold');doc.text(a,M,y);doc.setFont('helvetica','normal');const l=doc.splitTextToSize(String(b),W-45);doc.text(l,M+45,y);y+=5.2*l.length});
+ y+=2;doc.setDrawColor(RGB[0],RGB[1],RGB[2]);doc.setLineWidth(.6);doc.line(M,y,M+W,y);y+=8;
+ // A. score cards
+ H('A. Hasil simulasi akreditasi');
+ const potTot=r1(R.proj[3].score-c.total);
+ const cards=[['Nilai simulasi',fmt(c.total),rk.l],['Tata kelola',fmt(c.tk)+' / 46',Math.round(c.tk/46*100)+'% dari bobot'],['Mutu artikel',fmt(c.ma)+' / 54',Math.round(c.ma/54*100)+'% dari bobot'],['Potensi tambahan','+'+fmt(potTot),'bila seluruh RTL tuntas']];
+ const cw=(W-9)/4;cards.forEach((cd,ix)=>{const x=M+ix*(cw+3);doc.setFillColor(ix===0?RGB[0]:244,ix===0?RGB[1]:246,ix===0?RGB[2]:245);doc.setDrawColor(221,227,230);doc.setLineWidth(.2);doc.roundedRect(x,y,cw,22,2,2,ix===0?'F':'FD');
+  doc.setTextColor(ix===0?255:86,ix===0?255:98,ix===0?255:115);doc.setFont('helvetica','normal');doc.setFontSize(8);doc.text(cd[0],x+3,y+5);
+  doc.setTextColor(ix===0?255:24,ix===0?255:38,ix===0?255:58);doc.setFont('helvetica','bold');doc.setFontSize(ix===0?16:13);doc.text(cd[1],x+3,y+13);
+  doc.setFont('helvetica','normal');doc.setFontSize(7.5);doc.text(doc.splitTextToSize(cd[2],cw-6),x+3,y+18)});
+ doc.setTextColor(24,38,58);y+=28;
+ if(c.di<0){P('Disinsentif: '+fmt(c.di)+' poin sudah dikurangkan dari nilai simulasi.',{s:9,gap:3})}
+ // rekap per unsur table
+ P('Rekap nilai dan potensi per unsur',{b:true,gap:1});
+ const rb=RK.map(x=>[x.k,x.t,String(x.mx),fmt(x.got),x.pct+'%','+'+fmt(x.gap),x.empty?x.empty+' belum dinilai':'']);
+ const tk=RK.filter(x=>x.grp==='tk'),ma=RK.filter(x=>x.grp==='ma');
+ const body=[[{content:'Standar tata kelola',colSpan:7,styles:SUB}]].concat(rb.slice(0,tk.length),[[{content:'Subtotal tata kelola',colSpan:2,styles:{fontStyle:'bold'}},{content:'46',styles:{fontStyle:'bold'}},{content:fmt(c.tk),styles:{fontStyle:'bold'}},{content:Math.round(c.tk/46*100)+'%',styles:{fontStyle:'bold'}},{content:'+'+fmt(r1(46-c.tk)),styles:{fontStyle:'bold'}},'']],
+  [[{content:'Standar mutu artikel',colSpan:7,styles:SUB}]],rb.slice(tk.length),[[{content:'Subtotal mutu artikel',colSpan:2,styles:{fontStyle:'bold'}},{content:'54',styles:{fontStyle:'bold'}},{content:fmt(c.ma),styles:{fontStyle:'bold'}},{content:Math.round(c.ma/54*100)+'%',styles:{fontStyle:'bold'}},{content:'+'+fmt(r1(54-c.ma)),styles:{fontStyle:'bold'}},'']],
+  [['H','Disinsentif','-',fmt(c.di),'-',c.di<0?'+'+fmt(-c.di):'0','pengurang']],
+  [[{content:'TOTAL',colSpan:2,styles:{fontStyle:'bold',fillColor:[230,240,235]}},{content:'100',styles:{fontStyle:'bold',fillColor:[230,240,235]}},{content:fmt(c.total),styles:{fontStyle:'bold',fillColor:[230,240,235]}},{content:Math.round(c.total)+'%',styles:{fontStyle:'bold',fillColor:[230,240,235]}},{content:'+'+fmt(r1(100-c.total)),styles:{fontStyle:'bold',fillColor:[230,240,235]}},{content:rk.l,styles:{fontStyle:'bold',fillColor:[230,240,235]}}]]);
+ T({head:[['Unsur','Komponen','Bobot','Nilai','Capaian','Potensi','Catatan']],body,columnStyles:{0:{cellWidth:13},2:{cellWidth:15,halign:'right'},3:{cellWidth:15,halign:'right'},4:{cellWidth:17,halign:'right'},5:{cellWidth:17,halign:'right'},6:{cellWidth:28}}});
+ // bar chart
+ if(y>200){doc.addPage();y=20}
+ P('Capaian nilai terhadap bobot per unsur',{b:true,gap:3});
+ const lw=62,bw=W-lw-30,sc=bw/34;
+ RK.forEach(x=>{doc.setFont('helvetica','normal');doc.setFontSize(8.5);doc.setTextColor(24,38,58);doc.text(x.k+'. '+doc.splitTextToSize(x.t,lw-8)[0],M,y+3.4);
+  doc.setFillColor(226,231,233);doc.rect(M+lw,y,x.mx*sc,4.6,'F');doc.setFillColor(RGB[0],RGB[1],RGB[2]);if(x.got>0)doc.rect(M+lw,y,x.got*sc,4.6,'F');
+  doc.setTextColor(86,98,115);doc.text(fmt(x.got)+' / '+x.mx+'  ('+x.pct+'%)',M+lw+x.mx*sc+2,y+3.4);y+=7});
+ doc.setFontSize(7.5);doc.setTextColor(86,98,115);doc.setFillColor(RGB[0],RGB[1],RGB[2]);doc.rect(M+lw,y+1,4,3,'F');doc.text('nilai diperoleh',M+lw+5.5,y+3.6);doc.setFillColor(226,231,233);doc.rect(M+lw+30,y+1,4,3,'F');doc.text('potensi yang belum diraih (sisa bobot)',M+lw+35.5,y+3.6);doc.setTextColor(24,38,58);y+=10;
+ // gates
+ if(y>215){doc.addPage();y=20}
+ P('Status Pemeriksaan Awal dan Kelayakan',{b:true,gap:1});
+ const gl2=AWAL.filter(a=>!(a.ulang&&j.type==='baru')).map(a=>['Awal',a.t,j.gate[a.k]==='yes'?'Terpenuhi':j.gate[a.k]==='no'?'Belum terpenuhi':'Belum ditandai']).concat(LAYAK.map(a=>['Kelayakan',a.t,j.gate[a.k]==='yes'?'Terpenuhi':j.gate[a.k]==='no'?'Belum terpenuhi':'Belum ditandai']));
+ T({head:[['Tahap','Butir pemeriksaan','Status']],body:gl2,styles:{fontSize:8,cellPadding:1.6,textColor:[24,38,58],lineColor:[221,227,230],lineWidth:.1},columnStyles:{0:{cellWidth:22},2:{cellWidth:32}},didParseCell:d=>{if(d.section==='body'&&d.column.index===2){if(d.cell.raw==='Belum terpenuhi'){d.cell.styles.textColor=[168,40,31];d.cell.styles.fontStyle='bold'}else if(d.cell.raw==='Terpenuhi')d.cell.styles.textColor=[19,112,95]}}});
+ let st;if(c.awalFail.length)st='Tidak lolos Pemeriksaan Awal. Usulan tidak akan dinilai sebelum butir bertanda merah dipenuhi.';else if(c.layakFail.length)st='Tidak lolos Pemeriksaan Kelayakan. Pengusulan kembali paling cepat 2 tahun sejak penetapan.';else if(c.awalOpen.length||c.layakOpen.length)st='Pemeriksaan belum lengkap: '+(c.awalOpen.length+c.layakOpen.length)+' butir belum ditandai.';else st='Lolos Pemeriksaan Awal dan Kelayakan; usulan berlanjut ke penilaian.';
+ P('Kesimpulan: '+st,{b:true,s:9.5,gap:6});
+ // B. rincian sub-unsur
+ doc.addPage();y=20;
+ H('B. Rincian nilai dan potensi per sub-unsur');
+ P('Potensi adalah selisih antara bobot maksimal dan nilai yang diperoleh. Kolom Tahap menunjukkan kapan perbaikannya dijadwalkan di RTL.',{s:9,gap:3});
+ const b2=[];U.forEach(g=>{b2.push([{content:g.g+'. '+g.gt,colSpan:7,styles:SUB}]);g.items.forEach(i=>{const v=itemVal(i,j);const gp=r1(i.max-(v||0));b2.push([i.k,i.t,optLabel(i,j),fmt(i.max),v===null?'-':fmt(v),gp>0?'+'+fmt(gp):'maks',v===null?'belum dinilai':gp>0?'Tahap '+hzOf(i.k):'-'])})});
+ b2.push([{content:'H. Disinsentif',colSpan:7,styles:SUB}]);
+ DIS.forEach(d=>{const v=j.dis[d.k]||0;const o=d.o.find(x=>x[0]===v);b2.push([d.k,d.t,o?o[1]:'','-',fmt(v),v<0?'+'+fmt(-v):'-',v<0?'Tahap 1':'-'])});
+ T({head:[['Kode','Sub-unsur','Kondisi yang dipilih','Bobot','Nilai','Potensi','Tahap']],body:b2,columnStyles:{0:{cellWidth:13},1:{cellWidth:35},3:{cellWidth:13,halign:'right'},4:{cellWidth:12,halign:'right'},5:{cellWidth:15,halign:'right'},6:{cellWidth:20}},didParseCell:d=>{if(d.section==='body'&&d.column.index===5&&typeof d.cell.raw==='string'&&d.cell.raw[0]==='+'){d.cell.styles.textColor=[168,40,31];d.cell.styles.fontStyle='bold'}}});
+ // top potensi
+ const top=gaps(j).filter(x=>!x.empty).slice(0,10);
+ if(top.length){if(y>220){doc.addPage();y=20}P('Sepuluh potensi nilai terbesar',{b:true,gap:1});
+  T({head:[['No','Sub-unsur','Nilai saat ini','Potensi','Tahap RTL']],body:top.map((x,ix)=>[String(ix+1),x.i.k+' '+x.i.t,x.dis?fmt(x.got):fmt(x.got)+' / '+fmt(x.i.max),'+'+fmt(x.gap),x.dis?'Tahap 1':'Tahap '+hzOf(x.i.k)]),columnStyles:{0:{cellWidth:10,halign:'right'},2:{cellWidth:28,halign:'right'},3:{cellWidth:20,halign:'right'},4:{cellWidth:24}}})}
+ // C strategi
+ doc.addPage();y=20;
+ H('C. Strategi peningkatan akreditasi');
+ R.S.forEach((s,ix)=>{P((ix+1)+'.',{gap:-4.8});P(s,{ind:6,gap:2.5})});y+=3;
+ if(y>200){doc.addPage();y=20}
+ H('D. Proyeksi nilai per tahap');
+ T({head:[['Tahap','Rentang waktu','Kegiatan','Potensi poin','Proyeksi nilai','Proyeksi status']],body:[['Kondisi saat ini','-','-','-',fmt(c.total),rk.l]].concat(R.proj.map(p=>[HZ[p.h].l,HZ[p.h].w,String(p.n),'+'+fmt(p.pts),fmt(p.score),p.rank])),columnStyles:{2:{halign:'right',cellWidth:18},3:{halign:'right',cellWidth:20},4:{halign:'right',cellWidth:22}}});
+ P('Proyeksi mengasumsikan setiap kegiatan mencapai nilai maksimal sub-unsurnya. Hasil nyata bergantung pada penilaian asesor.',{s:8.5,gap:6});
+ if(y>190){doc.addPage();y=20}else y+=4;
+ H('E. Rencana Tindak Lanjut (RTL)');
+ P('Kegiatan dikelompokkan per tahap dan diurutkan dari potensi poin terbesar. Syarat pemeriksaan yang belum terpenuhi ditempatkan paling awal.',{s:9,gap:4});
+ let no=0;
+ [1,2,3,4].forEach(h=>{const its=R.items.filter(x=>x.h===h);if(!its.length)return;
+  const body=its.map(x=>{no++;return [String(no),(x.gate?'Syarat pemeriksaan\n':x.k+'\n')+x.t+'\nSaat ini: '+x.cur,x.a.map((a,ix)=>(ix+1)+'. '+a).join('\n'),x.pj,x.ind,x.gate?'syarat':'+'+fmt(x.gap)]});
+  body.unshift([{content:HZ[h].l+'  ('+HZ[h].w+')',colSpan:6,styles:SUB}]);
+  T({head:[['No','Sub-unsur','Kegiatan','Penanggung jawab','Indikator keberhasilan','Poin']],body,columnStyles:{0:{cellWidth:9,halign:'right',cellPadding:{top:2,bottom:2,left:1,right:1.5}},1:{cellWidth:32},2:{cellWidth:63},3:{cellWidth:26},4:{cellWidth:33},5:{cellWidth:15,halign:'right'}},showHead:'everyPage'})});
+ if(!R.items.length)P('Tidak ada kegiatan perbaikan. Semua sub-unsur yang dinilai sudah bernilai maksimal.');
+ if(R.empty.length)P('Belum dinilai dan tidak masuk RTL: '+R.empty.join(', ')+'.',{s:9,gap:6});
+ if(R.items.length){doc.addPage();y=20;
+  H('F. Lembar pemantauan RTL');
+  P('Diisi tim pengelola jurnal saat rapat evaluasi berkala.',{s:9,gap:4});
+  no=0;T({head:[['No','Sub-unsur','Tahap','Potensi','Target selesai','Status','Catatan']],body:R.items.map(x=>{no++;return [String(no),x.gate?x.t:x.k+' '+x.t,HZ[x.h].w,x.gate?'syarat':'+'+fmt(x.gap),'','','']}),styles:{fontSize:8.5,cellPadding:3,minCellHeight:9,textColor:[24,38,58],lineColor:[200,206,210],lineWidth:.1},columnStyles:{0:{cellWidth:11,halign:'right',cellPadding:{top:3,bottom:3,left:1,right:2}},1:{cellWidth:46},2:{cellWidth:27},3:{cellWidth:15,halign:'right'},4:{cellWidth:22},5:{cellWidth:20}}});
+  if(y>235){doc.addPage();y=30}
+  y+=4;doc.setFont('helvetica','normal');doc.setFontSize(10);
+  doc.text('Disusun oleh,',M,y);doc.text('Mengetahui,',M+W/2+8,y);y+=5;
+  doc.text(r.jabatan||'Pengelola jurnal',M,y);doc.text('Editor in Chief / Pimpinan penerbit',M+W/2+8,y);y+=24;
+  doc.text(r.pengisi||'(.................................)',M,y);doc.text('(.................................)',M+W/2+8,y)}
+ const n=doc.getNumberOfPages();for(let p=1;p<=n;p++){doc.setPage(p);doc.setFont('helvetica','normal');doc.setFontSize(8);doc.setTextColor(110,118,130);doc.text('Simulasi berdasarkan Permendiktisaintek 9/2026 dan Juknis 374/2026. Bahan evaluasi internal, bukan keputusan asesor.',M,289);doc.text(p+'/'+n,210-M,289,{align:'right'})}
+ return doc.output('blob');
+}
+function renderRekap(j){
+ const {c,rows}=rekap(j);
+ const tr=x=>`<tr><td>${x.k}</td><td>${esc(x.t)}</td><td class="n">${x.mx}</td><td class="n">${fmt(x.got)}</td><td><div class="rk-bar"><span style="width:${x.pct}%"></span></div></td><td class="n">${x.pct}%</td><td class="n rk-pot">${x.gap>0?'+'+fmt(x.gap):'maks'}</td></tr>`;
+ const sub=(l,m,v)=>`<tr class="rk-sub"><td colspan="2">${l}</td><td class="n">${m}</td><td class="n">${fmt(v)}</td><td></td><td class="n">${Math.round(v/m*100)}%</td><td class="n rk-pot">+${fmt(r1(m-v))}</td></tr>`;
+ return `<div class="group"><h3>Hasil simulasi: nilai dan potensi per unsur</h3><span class="pts">${fmt(c.total)} dari 100</span></div>
+ <div class="table-wrap"><table class="cmp"><tr><th>Unsur</th><th>Komponen</th><th>Bobot</th><th>Nilai</th><th style="width:22%">Capaian</th><th>%</th><th>Potensi</th></tr>
+ ${rows.filter(x=>x.grp==='tk').map(tr).join('')}${sub('Subtotal tata kelola',46,c.tk)}
+ ${rows.filter(x=>x.grp==='ma').map(tr).join('')}${sub('Subtotal mutu artikel',54,c.ma)}
+ <tr><td>H</td><td>Disinsentif</td><td class="n">-</td><td class="n">${fmt(c.di)}</td><td></td><td class="n">-</td><td class="n rk-pot">${c.di<0?'+'+fmt(-c.di):'0'}</td></tr>
+ <tr class="rk-sub"><td colspan="2">Total</td><td class="n">100</td><td class="n">${fmt(c.total)}</td><td></td><td class="n">${Math.round(c.total)}%</td><td class="n rk-pot">+${fmt(r1(100-c.total))}</td></tr></table></div>
+ <p class="note">Potensi adalah sisa bobot yang belum diraih. Rincian per sub-unsur ada di PDF.</p>`;
+}
+let LASTURL=null;
+function directSave(blob,nm){
+ try{if(LASTURL)URL.revokeObjectURL(LASTURL)}catch(e){}
+ const u=URL.createObjectURL(blob);LASTURL=u;
+ try{const a=document.createElement('a');a.href=u;a.download=nm;a.rel='noopener';document.body.appendChild(a);a.click();a.remove()}catch(e){}
+ return u;
+}
+function sayLink(u,nm){document.querySelectorAll('.pdfmsg').forEach(m=>{m.textContent='';const t=document.createElement('span');t.textContent='PDF sudah dibuat. Bila unduhan tidak muncul otomatis, ';const a=document.createElement('a');a.href=u;a.target='_blank';a.rel='noopener';a.download=nm;a.textContent='klik di sini untuk membuka atau menyimpan PDF';m.appendChild(t);m.appendChild(a);m.appendChild(document.createTextNode('.'))})}
+async function downloadPdf(){
+ const msgs=document.querySelectorAll('.pdfmsg');const btns=document.querySelectorAll('#pdfBtn,[data-pdf]');const say=t=>msgs.forEach(m=>m.textContent=t);
+ if(!window.jspdf||!window.jspdf.jsPDF){say('Pembuat PDF belum termuat. Periksa koneksi internet, muat ulang halaman, lalu coba lagi.');return}
+ const j=J();btns.forEach(b=>b.disabled=true);say('Menyiapkan PDF...');
+ let blob,nm;
+ try{blob=buildPdf(j);nm=('Hasil Simulasi dan RTL Akreditasi - '+(j.name||'Jurnal')).replace(/[\\/:*?"<>|]/g,'').slice(0,120)+'.pdf'}
+ catch(e){say('PDF gagal dibuat: '+(e&&e.message||e));btns.forEach(b=>b.disabled=false);return}
+ try{
+  if(DL){try{await DL.save({filename:nm,data:blob});say('PDF tersimpan.');return}
+   catch(e){const c=e&&e.code;if(c==='declined'){say('Unduhan dibatalkan.');return}if(c==='rate_limited'){say('Ada unduhan lain yang sedang menunggu. Coba lagi sebentar.');return}}}
+  const u=directSave(blob,nm);sayLink(u,nm);
+ }finally{btns.forEach(b=>b.disabled=false)}
+}
+
+document.getElementById('pdfBtn').onclick=downloadPdf;
+
+load();renderSteps();renderMeta();renderStep();renderPanel();
+})();
+</script>
+</body>
+</html>
