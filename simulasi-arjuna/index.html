@@ -127,7 +127,7 @@ footer a{color:var(--accent)}
 <div class="wrap">
   <div class="top">
     <div>
-      <span class="badge">Simulasi · bukan aplikasi resmi</span>
+      <span class="badge">Simulasi \u00B7 bukan aplikasi resmi</span>
       <h1 style="margin-top:8px">Simulasi Usulan ARJUNA</h1>
       <p>Latihan mengisi usulan akreditasi dan reakreditasi jurnal mengikuti urutan formulir ARJUNA: Kelola Terbitan, Kelengkapan Jurnal, dan Tambah Issue. Setiap isian langsung diperiksa dan diberi masukan perbaikan. Data hanya tersimpan di peramban Anda.</p>
     </div>
@@ -477,14 +477,14 @@ function viewIss(j){
 const tabName=t=>TABS.find(x=>x[0]===t)[1];
 function goBtn(c,text){return `<button class="linkbtn" data-go="${c.go||c.tab}" ${c.iss!=null?`data-iss="${c.iss}"`:""} ${c.fk?`data-focus="${c.fk}"`:""}>${text}</button>`;}
 function viewHasil(j,C){
-  const groups={};C.list.forEach(c=>{(groups[tabName(c.tab)+" · "+c.sec]=groups[tabName(c.tab)+" · "+c.sec]||[]).push(c);});
+  const groups={};C.list.forEach(c=>{(groups[tabName(c.tab)+" \u00B7 "+c.sec]=groups[tabName(c.tab)+" \u00B7 "+c.sec]||[]).push(c);});
   const miss=C.list.filter(c=>!c.ok);
   const badFk=new Set(C.notes.filter(n=>n.lvl==="bad").map(n=>n.fk||("iss"+n.iss)));
   const w=miss.filter(c=>c.lvl==="wajib"&&!badFk.has(c.fk)),s=miss.filter(c=>c.lvl==="saran");
   const nb=C.notes.filter(n=>n.lvl==="bad"),nw=C.notes.filter(n=>n.lvl==="warn");
-  const item=c=>`<div class="res-item"><span class="pill ${c.lvl}">${c.lvl}</span><div>${esc(c.label)}${c.why?`<small>${esc(c.why)}</small>`:""}<small>${tabName(c.tab)} · ${esc(c.sec)} · ${goBtn(c,"Perbaiki")}</small></div></div>`;
-  const note=n=>`<div class="res-item"><span class="pill ${n.lvl}">${n.lvl==="bad"?"salah":"periksa"}</span><div>${esc(n.label)}<small>${esc(n.msg)}</small><small>${tabName(n.tab)} · ${esc(n.sec)} · ${goBtn(n,"Buka")}</small></div></div>`;
-  return `<section class="card"><header><h2>Ringkasan per Bagian</h2><button id="print-btn" class="no-print">Cetak ringkasan</button></header><div class="tbl"><table><thead><tr><th>Bagian</th><th>Wajib</th><th>Saran</th><th>Kesiapan</th></tr></thead><tbody>
+  const item=c=>`<div class="res-item"><span class="pill ${c.lvl}">${c.lvl}</span><div>${esc(c.label)}${c.why?`<small>${esc(c.why)}</small>`:""}<small>${tabName(c.tab)} \u00B7 ${esc(c.sec)} \u00B7 ${goBtn(c,"Perbaiki")}</small></div></div>`;
+  const note=n=>`<div class="res-item"><span class="pill ${n.lvl}">${n.lvl==="bad"?"salah":"periksa"}</span><div>${esc(n.label)}<small>${esc(n.msg)}</small><small>${tabName(n.tab)} \u00B7 ${esc(n.sec)} \u00B7 ${goBtn(n,"Buka")}</small></div></div>`;
+  return `<section class="card"><header><h2>Ringkasan per Bagian</h2><span class="jbar no-print"><button id="pdf-btn" class="pri">Unduh PDF hasil</button><button id="print-btn">Cetak</button></span></header><div class="tbl"><table><thead><tr><th>Bagian</th><th>Wajib</th><th>Saran</th><th>Kesiapan</th></tr></thead><tbody>
     ${Object.entries(groups).map(([key,arr])=>{const wa=arr.filter(c=>c.lvl==="wajib"),sa=arr.filter(c=>c.lvl==="saran");return `<tr><td>${esc(key)}</td><td class="num">${wa.filter(c=>c.ok).length}/${wa.length}</td><td class="num">${sa.length?sa.filter(c=>c.ok).length+"/"+sa.length:"-"}</td><td class="num">${pct(arr)}%</td></tr>`;}).join('')}
   </tbody></table></div></section>
   <section class="card"><header><h2>Isian yang salah</h2><small>${nb.length} butir</small></header><p class="note">Isian ini sudah terisi tetapi kemungkinan besar keliru, misalnya tautan statistik di kolom APC atau tautan ke beranda.</p>
@@ -514,7 +514,7 @@ function renderSide(j,C){
    <div class="rows">${secs.map(([t,l])=>{const p=pct(C.list.filter(c=>c.tab===t));return `<div class="row"><span>${l}</span><span class="num">${p}%</span><span class="bar"><i style="width:${p}%"></i></span></div>`;}).join('')}</div>
    <p class="note">${bad.length?`${bad.length} isian terdeteksi salah. `:""}${C.notes.filter(n=>n.lvl==="warn").length} catatan perlu diperiksa.</p></section>
    <section class="card"><header><h3>Perbaiki dulu</h3></header><div class="gap"><ul>${top.length?top.map(c=>`<li><span class="pill ${c.pl==="bad"?"bad":"wajib"}">${c.pl==="bad"?"salah":"wajib"}</span>${goBtn(c,esc(c.t))}</li>`).join(''):'<li><span class="pill ok">siap</span>Tidak ada kekurangan wajib.</li>'}</ul></div>
-   <button class="linkbtn" data-go="hasil">Lihat semua masukan</button></section>`;
+   <div class="jbar"><button class="linkbtn" data-go="hasil">Lihat semua masukan</button></div><button id="pdf-btn2" class="pri">Unduh PDF hasil dan masukan</button></section>`;
 }
 function render(keepFocus){
   const j=J(); const C=checks(j);
@@ -566,6 +566,7 @@ document.addEventListener("click",e=>{
   if(t.id==="iadd"){const j=J();j.issues.push(newIssue());S.iss=j.issues.length-1;save();render();return;}
   if(t.id==="idel"){const j=J();j.issues.splice(S.iss,1);S.iss=Math.max(0,S.iss-1);save();render();toast("Terbitan dihapus");return;}
   if(t.id==="print-btn"){printSummary();return;}
+  if(t.id==="pdf-btn"||t.id==="pdf-btn2"){downloadPDF(t);return;}
 });
 document.getElementById('jsel').addEventListener("change",e=>{S.cur=e.target.value;S.iss=0;save();render();});
 document.getElementById('jadd').addEventListener("click",()=>{const j=blank("Jurnal baru");S.journals.push(j);S.cur=j.id;S.tab="ident";S.iss=0;save();render();
@@ -590,6 +591,83 @@ function printSummary(){
   document.getElementById('print').innerHTML=`<h1>${esc(j.d.nama||"Jurnal")}</h1><p>Hasil simulasi usulan ARJUNA, ${new Date().toLocaleDateString("id-ID",{day:"numeric",month:"long",year:"numeric"})}. Kesiapan butir wajib: ${pct(C.list)}%.</p>
   <table><thead><tr><th>Jenis</th><th>Butir</th><th>Masukan</th></tr></thead><tbody>${rows.map(r=>`<tr><td>${r[0]}</td><td style="white-space:normal">${esc(r[1])}</td><td style="white-space:normal">${esc(r[2])}</td></tr>`).join('')}</tbody></table>`;
   window.print();
+}
+/* ---------- PDF hasil dan masukan ---------- */
+const PDF_LIBS=["https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js","https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.8.2/jspdf.plugin.autotable.min.js"];
+function loadScript(src){return new Promise((res,rej)=>{const sc=document.createElement("script");sc.src=src;sc.onload=res;sc.onerror=rej;document.head.appendChild(sc);});}
+const lat=v=>String(v??"").replace(/[\u2018\u2019]/g,"'").replace(/[\u201C\u201D]/g,'"').replace(/[\u2013\u2014]/g,"-").replace(/\u2026/g,"...").replace(/[\u00B7\u2022]/g,"|").replace(/[^\x00-\xFF]/g,"");
+function collect(j,C){
+  const badFk=new Set(C.notes.filter(n=>n.lvl==="bad").map(n=>n.fk));
+  const loc=c=>`${tabName(c.tab)} > ${c.sec}`;
+  return {
+    salah:C.notes.filter(n=>n.lvl==="bad").map(n=>[n.label,n.msg,loc(n)]),
+    wajib:C.list.filter(c=>!c.ok&&c.lvl==="wajib"&&!badFk.has(c.fk)).map(c=>[c.label,c.why||"Belum diisi.",loc(c)]),
+    periksa:C.notes.filter(n=>n.lvl==="warn").map(n=>[n.label,n.msg,loc(n)]),
+    saran:C.list.filter(c=>!c.ok&&c.lvl==="saran").map(c=>[c.label,c.why||"",loc(c)])
+  };
+}
+async function downloadPDF(btn){
+  if(!(window.jspdf&&window.jspdf.jsPDF&&window.jspdf.jsPDF.API.autoTable)){
+    if(btn)btn.disabled=true; toast("Menyiapkan PDF...");
+    try{for(const u of PDF_LIBS)await loadScript(u);}
+    catch(e){if(btn)btn.disabled=false;toast("Pembuat PDF tidak bisa dimuat. Dialihkan ke cetak, pilih Simpan sebagai PDF.");setTimeout(printSummary,600);return;}
+    if(btn)btn.disabled=false;
+  }
+  const j=J(),C=checks(j),R=collect(j,C);
+  const {jsPDF}=window.jspdf; const doc=new jsPDF({unit:"mm",format:"a4"});
+  const W=doc.internal.pageSize.getWidth(), M=14; let y=16;
+  const today=new Date(); const tgl=today.toLocaleDateString("id-ID",{day:"numeric",month:"long",year:"numeric"});
+  const TEAL=[15,107,115], RED=[179,38,30], AMB=[161,92,0], GRN=[31,122,69], GRY=[91,104,118];
+  const ensure=h=>{if(y+h>282){doc.addPage();y=16;}};
+  const heading=(t,col,sub)=>{ensure(18);doc.setFont("helvetica","bold");doc.setFontSize(12);doc.setTextColor(...(col||[22,34,46]));doc.text(lat(t),M,y);y+=2;doc.setDrawColor(...(col||[213,220,227]));doc.setLineWidth(.4);doc.line(M,y,W-M,y);y+=4;
+    if(sub){doc.setFont("helvetica","normal");doc.setFontSize(8.5);doc.setTextColor(...GRY);const ls=doc.splitTextToSize(lat(sub),W-2*M);doc.text(ls,M,y+1);y+=ls.length*3.8+2;}doc.setTextColor(22,34,46);};
+  const table=(head,body,col,colStyles)=>{doc.autoTable({startY:y,head:[head.map(lat)],body:body.map(r=>r.map(lat)),margin:{left:M,right:M},theme:"grid",
+    styles:{font:"helvetica",fontSize:8.3,cellPadding:1.8,overflow:"linebreak",lineColor:[213,220,227],lineWidth:.15,textColor:[22,34,46],valign:"top"},
+    headStyles:{fillColor:col||TEAL,textColor:255,fontStyle:"bold"},alternateRowStyles:{fillColor:[246,248,250]},columnStyles:colStyles||{}});y=doc.lastAutoTable.finalY+7;};
+  // Judul
+  doc.setFont("helvetica","bold");doc.setFontSize(16);doc.setTextColor(...TEAL);doc.text("Hasil Simulasi Usulan ARJUNA",M,y);y+=7;
+  doc.setFontSize(12.5);doc.setTextColor(22,34,46);const nm=doc.splitTextToSize(lat(j.d.nama||"Jurnal tanpa nama"),W-2*M);doc.text(nm,M,y);y+=nm.length*5.5;
+  doc.setFont("helvetica","normal");doc.setFontSize(9);doc.setTextColor(...GRY);
+  const meta=[`Tanggal simulasi: ${tgl}`,`Status usulan: ${j.k.status||"belum dipilih"}`,`Frekuensi: ${FREK.find(f=>f[0]===j.d.frek)?.[1]||"-"}`,j.d.url?`URL jurnal: ${j.d.url}`:""].filter(Boolean);
+  meta.forEach(t=>{doc.text(lat(t),M,y);y+=4.3;});y+=2;
+  // Kotak skor
+  const all=pct(C.list);
+  doc.setFillColor(216,238,238);doc.roundedRect(M,y,W-2*M,22,2,2,"F");
+  doc.setFont("helvetica","bold");doc.setFontSize(22);doc.setTextColor(...TEAL);doc.text(all+"%",M+5,y+11);
+  doc.setFontSize(8.5);doc.setFont("helvetica","normal");doc.setTextColor(22,34,46);doc.text("butir wajib terpenuhi",M+5,y+17);
+  const stats=[["Isian salah",R.salah.length,RED],["Belum diisi / belum memenuhi",R.wajib.length,RED],["Perlu diperiksa",R.periksa.length,AMB],["Saran penguatan",R.saran.length,AMB]];
+  stats.forEach(([l,n,c],i)=>{const x=M+48+i*33;doc.setFont("helvetica","bold");doc.setFontSize(14);doc.setTextColor(...c);doc.text(String(n),x,y+10);doc.setFont("helvetica","normal");doc.setFontSize(7.3);doc.setTextColor(22,34,46);doc.text(doc.splitTextToSize(l,30),x,y+15);});
+  y+=29;
+  // Ringkasan per bagian
+  heading("Ringkasan per bagian");
+  const groups={};C.list.forEach(c=>{const k=tabName(c.tab)+" > "+c.sec;(groups[k]=groups[k]||[]).push(c);});
+  table(["Bagian","Wajib terpenuhi","Saran terpenuhi","Kesiapan"],Object.entries(groups).map(([k,a])=>{const w=a.filter(c=>c.lvl==="wajib"),s=a.filter(c=>c.lvl==="saran");return[k,`${w.filter(c=>c.ok).length}/${w.length}`,s.length?`${s.filter(c=>c.ok).length}/${s.length}`:"-",pct(a)+"%"];}),TEAL,{1:{halign:"center",cellWidth:28},2:{halign:"center",cellWidth:28},3:{halign:"center",cellWidth:20}});
+  // Masukan
+  const sec=(t,sub,rows,col,empty)=>{heading(`${t} (${rows.length})`,col,sub);if(rows.length)table(["No","Butir","Masukan perbaikan","Letak isian"],rows.map((r,i)=>[i+1,...r]),col,{0:{cellWidth:9,halign:"center"},1:{cellWidth:52},3:{cellWidth:38,textColor:GRY}});else{doc.setFontSize(9);doc.setTextColor(...GRN);doc.text(empty,M,y);y+=8;doc.setTextColor(22,34,46);}};
+  sec("Isian yang salah","Sudah terisi, tetapi kemungkinan besar keliru dan harus diganti.",R.salah,RED,"Tidak ada isian yang terdeteksi salah.");
+  sec("Belum diisi atau belum memenuhi syarat","Butir wajib yang masih kosong atau belum memenuhi ketentuan.",R.wajib,RED,"Semua butir wajib sudah terpenuhi.");
+  sec("Perlu diperiksa","Isian yang mungkin benar, tetapi sebaiknya dicek ulang sebelum dikirim.",R.periksa,AMB,"Tidak ada catatan.");
+  sec("Saran penguatan","Tidak wajib, tetapi memperkuat usulan.",R.saran,AMB,"Tidak ada saran tambahan.");
+  // Ringkasan isian
+  const st=(k,v)=>{if(!filled(v))return"Kosong";const f=flagFor(k,v,j);return f?(f[0]==="bad"?"Salah":f[0]==="warn"?"Periksa":"OK"):"OK";};
+  heading("Lampiran 1. Tautan yang diisi",null,"Status: OK, Periksa, Salah, atau Kosong.");
+  const links=[...IDENT[3].f.filter(f=>f.type==="url").map(f=>["Link Info: "+f.l,j.d[f.k]||"",st(f.k,j.d[f.k])]),["APC: URL Article Processing Charge",j.k.apcURL||"",st("apcURL",j.k.apcURL)],...URLS.map(([k,l])=>[l,j.u[k]||"",st(k,j.u[k])])];
+  doc.autoTable({startY:y,head:[["Butir","URL","Status"]],body:links.map(r=>r.map(lat)),margin:{left:M,right:M},theme:"grid",styles:{fontSize:7.6,cellPadding:1.5,overflow:"linebreak",lineColor:[213,220,227],lineWidth:.15,textColor:[22,34,46]},headStyles:{fillColor:TEAL,textColor:255},columnStyles:{0:{cellWidth:62},2:{cellWidth:17,halign:"center",fontStyle:"bold"}},
+    didParseCell:d=>{if(d.section==="body"&&d.column.index===2){const v=d.cell.raw;d.cell.styles.textColor=v==="OK"?GRN:v==="Periksa"?AMB:RED;}}});
+  y=doc.lastAutoTable.finalY+7;
+  heading("Lampiran 2. Keberagaman");
+  const nn=a=>a.map(c=>NEGN[c]?`${NEGN[c]} (${c})`:c).join(", ")||"-";
+  table(["","Personil","Institusi","Negara","Provinsi"],[["Dewan Editor",j.k.edPers||"-",j.k.edInst||"-",nn(j.k.edNeg),j.k.edProv.join(", ")||"-"],["Mitra Bestari",j.k.mbPers||"-",j.k.mbInst||"-",nn(j.k.mbNeg),j.k.mbProv.join(", ")||"-"],["Penulis (terbitan terakhir)",j.k.pnNegPer||"-","-",nn(j.k.pnNeg),"-"]],TEAL,{0:{cellWidth:30},1:{cellWidth:16,halign:"center"},2:{cellWidth:17,halign:"center"}});
+  heading("Lampiran 3. Terbitan dalam usulan");
+  table(["No","Vol/No","Tahun","Artikel","Halaman","Negara penulis","Provinsi","URL"],j.issues.map((s,i)=>[i+1,`${s.volume||"-"}/${s.nomor||"-"}`,s.tahun||"-",s.art||"-",s.hal||"-",nn(s.neg),s.prov.join(", ")||"-",s.url||"-"]),TEAL,{0:{cellWidth:8,halign:"center"},1:{cellWidth:14},2:{cellWidth:12},3:{cellWidth:13,halign:"center"},4:{cellWidth:17,halign:"center"}});
+  heading("Sebelum menekan tombol kirim di ARJUNA");
+  ["Buka setiap URL dari jendela penyamaran dan jaringan seluler. Halaman yang terblokir firewall sama dengan halaman kosong bagi asesor.","Cocokkan angka personil Dewan Editor dan Mitra Bestari dengan jumlah nama di halaman situs.","Cocokkan negara penulis di Tambah Issue dengan afiliasi di halaman abstrak setiap artikel.","Pastikan identitas di Garuda (nama, URL, ISSN, DOI) sudah benar, karena ARJUNA menariknya dari sana.","Login sekali dengan akun asesor untuk memastikan akunnya aktif."].forEach(t=>{const ls=doc.splitTextToSize(t,W-2*M-6);ensure(ls.length*4+2);doc.setFont("helvetica","normal");doc.setFontSize(9);doc.setTextColor(22,34,46);doc.rect(M,y-2.8,3,3);doc.text(ls,M+6,y);y+=ls.length*4+1.5;});
+  // Kaki halaman
+  const n=doc.getNumberOfPages();
+  for(let i=1;i<=n;i++){doc.setPage(i);doc.setFontSize(7.5);doc.setTextColor(...GRY);doc.text(lat("Simulasi latihan, bukan aplikasi resmi ARJUNA | faradilahasan-coder.github.io/simulasi-arjuna"),M,290);doc.text(`Hal. ${i} dari ${n}`,W-M,290,{align:"right"});}
+  const slug=(j.d.nama||"jurnal").normalize("NFD").replace(/[^\w\s-]/g,"").trim().replace(/\s+/g,"-").slice(0,50);
+  doc.save(`Hasil-Simulasi-ARJUNA-${slug}-${today.toISOString().slice(0,10)}.pdf`);
+  toast("PDF diunduh");
 }
 function modal(html,bind){const r=document.getElementById('modal-root');r.innerHTML=`<div class="modal" role="dialog" aria-modal="true"><div class="card">${html}</div></div>`;bind(r);r.querySelector("button")?.focus();}
 function closeModal(){document.getElementById('modal-root').innerHTML="";}
