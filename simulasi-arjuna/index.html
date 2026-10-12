@@ -3,8 +3,8 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<title>Simulasi Usulan ARJUNA</title>
-<meta name="description" content="Latihan mengisi usulan akreditasi dan reakreditasi jurnal mengikuti formulir ARJUNA terbaru, lengkap dengan masukan perbaikan untuk setiap isian.">
+<title>Simulasi Reakreditasi ARJUNA</title>
+<meta name="description" content="Latihan mengisi usulan reakreditasi jurnal mengikuti formulir ARJUNA terbaru, lengkap dengan masukan perbaikan untuk setiap isian.">
 <link rel="icon" href="../assets/brand/icon-fh-32.png">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -127,16 +127,15 @@ footer a{color:var(--accent)}
 <div class="wrap">
   <div class="top">
     <div>
-      <span class="badge">Simulasi \u00B7 bukan aplikasi resmi</span>
-      <h1 style="margin-top:8px">Simulasi Usulan ARJUNA</h1>
-      <p>Latihan mengisi usulan akreditasi dan reakreditasi jurnal mengikuti urutan formulir ARJUNA: Kelola Terbitan, Kelengkapan Jurnal, dan Tambah Issue. Setiap isian langsung diperiksa dan diberi masukan perbaikan. Data hanya tersimpan di peramban Anda.</p>
+      <span class="badge">Simulasi &middot; bukan aplikasi resmi</span>
+      <h1 style="margin-top:8px">Simulasi Reakreditasi ARJUNA</h1>
+      <p>Latihan mengisi usulan reakreditasi jurnal yang sudah terakreditasi, mengikuti urutan formulir ARJUNA: Kelola Terbitan, Kelengkapan Jurnal, dan Tambah Issue. Setiap isian langsung diperiksa dan diberi masukan perbaikan. Data hanya tersimpan di peramban Anda.</p>
     </div>
     <div class="jbar">
-      <select id="jsel" aria-label="Pilih jurnal"></select>
-      <button id="jadd">Jurnal baru</button>
+      <input id="jname" aria-label="Nama jurnal" placeholder="Tulis nama jurnal" style="width:min(340px,100%);font-weight:600">
       <button id="jdemo">Muat contoh latihan</button>
       <button id="jio">Ekspor / impor</button>
-      <button id="jdel" class="danger">Hapus</button>
+      <button id="jdel" class="danger">Kosongkan isian</button>
     </div>
   </div>
 
@@ -242,7 +241,7 @@ const KEY="simulasi-arjuna-v1";
 const newIssue=()=>({nomor:"",volume:"",tahun:"",url:"",bahasa:"",hal:"",art:"",neg:[],prov:[]});
 function blank(name){return {id:"j"+Date.now().toString(36)+Math.random().toString(36).slice(2,6),
   d:{nama:name||"",frek:"6",penNeg:"Indonesia"},
-  k:{status:"",user:"",tes:false,platform:"",edPers:"",edInst:"",edNeg:[],edProv:[],mbPers:"",mbInst:"",mbNeg:[],mbProv:[],pnNegPer:"",pnNeg:[],apc:"",cur:"IDR",apcURL:""},
+  k:{status:"Re-Akreditasi",user:"",tes:false,platform:"",edPers:"",edInst:"",edNeg:[],edProv:[],mbPers:"",mbInst:"",mbNeg:[],mbProv:[],pnNegPer:"",pnNeg:[],apc:"",cur:"IDR",apcURL:""},
   u:{}, issues:[newIssue(),newIssue(),newIssue()], demo:false};}
 /* Contoh fiktif dengan beberapa kesalahan yang sengaja dibuat, untuk latihan membaca masukan. */
 function demo(){
@@ -265,9 +264,14 @@ function demo(){
 }
 let S;
 try{S=JSON.parse(localStorage.getItem(KEY)||"null");}catch(e){S=null;}
-if(!S||!Array.isArray(S.journals)||!S.journals.length){const j=blank("Jurnal saya");S={journals:[j],cur:j.id,tab:"ident",iss:0};}
+if(!S||!Array.isArray(S.journals)||!S.journals.length){const j=blank("");S={journals:[j],cur:j.id,tab:"ident",iss:0};}
+/* Satu jurnal milik pengguna, ditambah satu jurnal contoh bila sedang berlatih */
+(function(){const mine=S.journals.find(x=>!x.demo)||blank("");const dm=S.journals.find(x=>x.demo);S.journals=dm?[mine,dm]:[mine];if(!S.journals.some(x=>x.id===S.cur))S.cur=mine.id;S.journals.forEach(x=>x.k.status="Re-Akreditasi");})();
+const MINE=()=>S.journals.find(x=>!x.demo);
 let saveT;
 function save(){clearTimeout(saveT);saveT=setTimeout(()=>{try{localStorage.setItem(KEY,JSON.stringify(S));}catch(e){}},250);}
+function saveNow(){clearTimeout(saveT);try{localStorage.setItem(KEY,JSON.stringify(S));}catch(e){}}
+addEventListener("pagehide",saveNow);
 const J=()=>S.journals.find(x=>x.id===S.cur)||S.journals[0];
 
 /* ---------- Pemeriksaan ---------- */
@@ -319,7 +323,6 @@ function checks(j){
     if(f.req) add({tab:"ident",sec:sec.t,label:f.l,ok:filled(v)&&!(fl&&fl[0]==="bad"),lvl:"wajib",fk:f.k,why:filled(v)?(fl?fl[1]:""):"Belum diisi."});
   }));
   // Kelengkapan: status dan kredensial
-  add({tab:"leng",sec:"Status Usulan",label:"Status usulan (Usulan Baru atau Re-Akreditasi)",ok:filled(k.status),lvl:"wajib",fk:"status",why:"Pilih status. Re-Akreditasi untuk jurnal yang pernah terakreditasi."});
   add({tab:"leng",sec:"Kredensial Akun Editor",label:"User editor untuk asesor",ok:filled(k.user),lvl:"wajib",fk:"user",why:"Buat akun khusus asesor di OJS dengan peran Editor."});
   add({tab:"leng",sec:"Kredensial Akun Editor",label:"Publishing platform",ok:filled(k.platform),lvl:"wajib",fk:"platform"});
   add({tab:"leng",sec:"Kredensial Akun Editor",label:"Akun asesor sudah dites login dari jendela penyamaran",ok:!!k.tes,lvl:"saran",fk:"tes",why:"Asesor yang gagal login bisa menunda penilaian."});
@@ -427,7 +430,7 @@ function viewLeng(j){
     ${chips("k."+p+"Prov",k[p+"Prov"],"prov","Asal Provinsi Indonesia (Keterlibatan 3 Tahun Terakhir)")}</div>`;
   const filledU=URLS.filter(([key])=>filled(j.u[key])).length;
   return `<section class="card"><header><h2>Status Usulan</h2></header><div class="grid">
-    ${sel("k.status",k.status,"Status Usulan",["Usulan Baru","Re-Akreditasi"],1,"Re-Akreditasi untuk jurnal yang sudah pernah terakreditasi.")}
+    <div class="f"><label>Status Usulan</label><input readonly value="Re-Akreditasi"><span class="hint">Simulasi ini khusus untuk jurnal yang sudah pernah terakreditasi.</span></div>
     <div class="f"><label>Frekuensi Terbitan</label><input readonly value="${esc(FREK.find(f=>f[0]===d.frek)?.[1]||"Isi di Identitas Jurnal")}"></div></div></section>
   <section class="card"><header><h2>Kredensial Akun Editor</h2></header><div class="grid">
     <div class="f full"><label>Url Jurnal</label><input readonly value="${esc(d.url||"Isi di Identitas Jurnal")}"></div>
@@ -519,7 +522,8 @@ function renderSide(j,C){
 function render(keepFocus){
   const j=J(); const C=checks(j);
   const ae=document.activeElement, aid=ae&&ae.id, selS=ae&&ae.selectionStart;
-  document.getElementById('jsel').innerHTML=S.journals.map(x=>`<option value="${x.id}" ${x.id===j.id?"selected":""}>${esc(x.d.nama||"Jurnal tanpa nama")}</option>`).join('');
+  const jn=document.getElementById('jname');if(document.activeElement!==jn)jn.value=j.d.nama||"";jn.readOnly=!!j.demo;
+  const db=document.getElementById('jdemo');db.textContent=j.demo?"Kembali ke jurnal saya":"Muat contoh latihan";
   renderTabs(C);
   const v=document.getElementById('view');
   v.innerHTML=S.tab==="ident"?viewIdent(j):S.tab==="leng"?viewLeng(j):S.tab==="iss"?viewIss(j):viewHasil(j,C);
@@ -533,7 +537,8 @@ function soft(path,el){
   renderTabs(C);renderSide(j,C);
   const fl=document.querySelector(`[data-flag="${path}"]`);
   if(fl&&el){const res=flagFor(el.dataset.fk||path.split(".").pop(),el.value,j);fl.hidden=!res;fl.className="flag "+(res?res[0]:"");fl.textContent=res?res[1]:"";}
-  const opt=document.querySelector(`#jsel option[value="${j.id}"]`);if(opt)opt.textContent=j.d.nama||"Jurnal tanpa nama";
+  const jn=document.getElementById('jname');if(document.activeElement!==jn)jn.value=j.d.nama||"";
+  const nf=document.querySelector('[data-path="d.nama"]');if(nf&&document.activeElement!==nf)nf.value=j.d.nama||"";
 }
 function getPath(p){const j=J(),a=p.split(".");if(a[0]==="d")return j.d[a[1]];if(a[0]==="k")return j.k[a[1]];if(a[0]==="u")return j.u[a[1]];if(a[0]==="i")return j.issues[+a[1]][a[2]];}
 function setPath(p,v){const j=J(),a=p.split(".");if(a[0]==="d")j.d[a[1]]=v;else if(a[0]==="k")j.k[a[1]]=v;else if(a[0]==="u")j.u[a[1]]=v;else if(a[0]==="i")j.issues[+a[1]][a[2]]=v;save();}
@@ -568,27 +573,27 @@ document.addEventListener("click",e=>{
   if(t.id==="print-btn"){printSummary();return;}
   if(t.id==="pdf-btn"||t.id==="pdf-btn2"){downloadPDF(t);return;}
 });
-document.getElementById('jsel').addEventListener("change",e=>{S.cur=e.target.value;S.iss=0;save();render();});
-document.getElementById('jadd').addEventListener("click",()=>{const j=blank("Jurnal baru");S.journals.push(j);S.cur=j.id;S.tab="ident";S.iss=0;save();render();
-  const el=document.querySelector('[data-path="d.nama"]');if(el){el.select();el.focus();}toast("Jurnal baru ditambahkan");});
-document.getElementById('jdemo').addEventListener("click",()=>{const j=demo();S.journals.push(j);S.cur=j.id;S.tab="hasil";S.iss=0;save();render();window.scrollTo({top:0});toast("Contoh latihan dimuat");});
+document.getElementById('jname').addEventListener("input",e=>{const j=J();if(j.demo)return;j.d.nama=e.target.value;save();soft("d.nama");});
+document.getElementById('jdemo').addEventListener("click",()=>{
+  if(J().demo){S.journals=[MINE()];S.cur=MINE().id;S.tab="ident";S.iss=0;saveNow();render();toast("Kembali ke jurnal Anda");return;}
+  const j=demo();S.journals=[MINE(),j];S.cur=j.id;S.tab="hasil";S.iss=0;saveNow();render();window.scrollTo({top:0});toast("Contoh latihan dimuat. Isian Anda tetap tersimpan.");});
 document.getElementById('jdel').addEventListener("click",()=>{const j=J();
-  modal(`<header><h2>Hapus ${esc(j.d.nama||"jurnal ini")}?</h2></header><p class="note">Semua isian jurnal ini di peramban akan hilang dan tidak bisa dikembalikan. Ekspor dulu jika masih diperlukan.</p><div class="jbar"><button class="pri" id="m-yes">Hapus jurnal</button><button id="m-no">Batal</button></div>`,
-  root=>{root.querySelector("#m-yes").onclick=()=>{S.journals=S.journals.filter(x=>x.id!==j.id);if(!S.journals.length)S.journals.push(blank("Jurnal saya"));S.cur=S.journals[0].id;save();closeModal();render();toast("Jurnal dihapus");};root.querySelector("#m-no").onclick=closeModal;});});
+  modal(`<header><h2>Kosongkan semua isian?</h2></header><p class="note">${j.demo?"Contoh latihan akan dimuat ulang dari awal.":"Semua isian di peramban ini akan hilang dan tidak bisa dikembalikan. Ekspor dulu jika masih diperlukan."}</p><div class="jbar"><button class="pri" id="m-yes">Kosongkan</button><button id="m-no">Batal</button></div>`,
+  root=>{root.querySelector("#m-yes").onclick=()=>{const n=j.demo?demo():blank("");S.journals=S.journals.map(x=>x.id===j.id?n:x);S.cur=n.id;S.iss=0;save();closeModal();render();toast("Isian dikosongkan");};root.querySelector("#m-no").onclick=closeModal;});});
 document.getElementById('jio').addEventListener("click",()=>{
   modal(`<header><h2>Ekspor atau impor data</h2></header><p class="note">Salin teks di bawah untuk memindahkan isian ke perangkat lain atau mengirimkannya ke rekan untuk diperiksa. Untuk impor, tempel teks hasil ekspor lalu tekan Impor.</p>
    <textarea id="m-txt" rows="9" style="font:500 .78rem var(--f-mono)">${esc(JSON.stringify(J()))}</textarea>
-   <div class="jbar"><button class="pri" id="m-copy">Salin data jurnal ini</button><button id="m-imp">Impor sebagai jurnal baru</button><button id="m-no">Tutup</button></div><p class="note" id="m-msg" hidden></p>`,
+   <div class="jbar"><button class="pri" id="m-copy">Salin data jurnal ini</button><button id="m-imp">Impor (mengganti isian saya)</button><button id="m-no">Tutup</button></div><p class="note" id="m-msg" hidden></p>`,
   root=>{const ta=root.querySelector("#m-txt"),msg=root.querySelector("#m-msg");
     root.querySelector("#m-copy").onclick=()=>{const fail=()=>{ta.select();msg.hidden=false;msg.textContent="Teks sudah dipilih. Tekan Ctrl+C untuk menyalin.";};try{navigator.clipboard.writeText(ta.value).then(()=>toast("Data disalin"),fail);}catch(e){fail();}};
     root.querySelector("#m-imp").onclick=()=>{try{const o=JSON.parse(ta.value);if(!o||!o.d||!o.k||!Array.isArray(o.issues))throw 0;const b=blank();
-      const n={...b,...o,id:b.id,demo:false,d:{...b.d,...o.d},k:{...b.k,...o.k},u:{...o.u},issues:o.issues.map(x=>({...newIssue(),...x}))};S.journals.push(n);S.cur=n.id;save();closeModal();render();toast("Data diimpor");}
+      const n={...b,...o,id:b.id,demo:false,d:{...b.d,...o.d},k:{...b.k,...o.k},u:{...o.u},issues:o.issues.map(x=>({...newIssue(),...x}))};n.k.status="Re-Akreditasi";S.journals=[n];S.cur=n.id;S.iss=0;save();closeModal();render();toast("Data diimpor");}
       catch(e){msg.hidden=false;msg.textContent="Teks tidak bisa dibaca. Pastikan yang ditempel adalah hasil ekspor dari aplikasi ini.";}};
     root.querySelector("#m-no").onclick=closeModal;});});
 function printSummary(){
   const j=J(),C=checks(j);
   const rows=[...C.notes.filter(n=>n.lvl==="bad").map(n=>["Salah",n.label,n.msg]),...C.list.filter(c=>!c.ok&&c.lvl==="wajib"&&!C.notes.some(n=>n.lvl==="bad"&&n.fk===c.fk)).map(c=>["Wajib",c.label,c.why||""]),...C.notes.filter(n=>n.lvl==="warn").map(n=>["Periksa",n.label,n.msg]),...C.list.filter(c=>!c.ok&&c.lvl==="saran").map(c=>["Saran",c.label,c.why||""])];
-  document.getElementById('print').innerHTML=`<h1>${esc(j.d.nama||"Jurnal")}</h1><p>Hasil simulasi usulan ARJUNA, ${new Date().toLocaleDateString("id-ID",{day:"numeric",month:"long",year:"numeric"})}. Kesiapan butir wajib: ${pct(C.list)}%.</p>
+  document.getElementById('print').innerHTML=`<h1>${esc(j.d.nama||"Jurnal")}</h1><p>Hasil simulasi reakreditasi ARJUNA, ${new Date().toLocaleDateString("id-ID",{day:"numeric",month:"long",year:"numeric"})}. Kesiapan butir wajib: ${pct(C.list)}%.</p>
   <table><thead><tr><th>Jenis</th><th>Butir</th><th>Masukan</th></tr></thead><tbody>${rows.map(r=>`<tr><td>${r[0]}</td><td style="white-space:normal">${esc(r[1])}</td><td style="white-space:normal">${esc(r[2])}</td></tr>`).join('')}</tbody></table>`;
   window.print();
 }
@@ -625,10 +630,10 @@ async function downloadPDF(btn){
     styles:{font:"helvetica",fontSize:8.3,cellPadding:1.8,overflow:"linebreak",lineColor:[213,220,227],lineWidth:.15,textColor:[22,34,46],valign:"top"},
     headStyles:{fillColor:col||TEAL,textColor:255,fontStyle:"bold"},alternateRowStyles:{fillColor:[246,248,250]},columnStyles:colStyles||{}});y=doc.lastAutoTable.finalY+7;};
   // Judul
-  doc.setFont("helvetica","bold");doc.setFontSize(16);doc.setTextColor(...TEAL);doc.text("Hasil Simulasi Usulan ARJUNA",M,y);y+=7;
+  doc.setFont("helvetica","bold");doc.setFontSize(16);doc.setTextColor(...TEAL);doc.text("Hasil Simulasi Reakreditasi ARJUNA",M,y);y+=7;
   doc.setFontSize(12.5);doc.setTextColor(22,34,46);const nm=doc.splitTextToSize(lat(j.d.nama||"Jurnal tanpa nama"),W-2*M);doc.text(nm,M,y);y+=nm.length*5.5;
   doc.setFont("helvetica","normal");doc.setFontSize(9);doc.setTextColor(...GRY);
-  const meta=[`Tanggal simulasi: ${tgl}`,`Status usulan: ${j.k.status||"belum dipilih"}`,`Frekuensi: ${FREK.find(f=>f[0]===j.d.frek)?.[1]||"-"}`,j.d.url?`URL jurnal: ${j.d.url}`:""].filter(Boolean);
+  const meta=[`Tanggal simulasi: ${tgl}`,`Status usulan: Re-Akreditasi`,`Frekuensi: ${FREK.find(f=>f[0]===j.d.frek)?.[1]||"-"}`,j.d.url?`URL jurnal: ${j.d.url}`:""].filter(Boolean);
   meta.forEach(t=>{doc.text(lat(t),M,y);y+=4.3;});y+=2;
   // Kotak skor
   const all=pct(C.list);
